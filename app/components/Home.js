@@ -15,7 +15,9 @@ class Home extends React.Component {
 
     render() {
 
-        const position = [27.980626, 84.578747];
+        const center_point = [27.980626, 84.578747];
+        const positions = [ [27.98, 84.57, "574"],
+                            [27.97, 84.56, "450"] ];
 
         return (
           <div className = 'home-container'>
@@ -23,13 +25,14 @@ class Home extends React.Component {
               selected = {0}
               history={this.props.history}
             />
-            <Map id="mapid" center={position} zoom={7}>
+            <Map id="mapid" center={center_point} zoom={7}>
 
               <TileLayer
                 url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               />
-              <Marker position={position}>
+
+              <Marker position={center_point}>
                 <Popup>
                   <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
                 </Popup>
@@ -42,13 +45,12 @@ class Home extends React.Component {
 
 module.exports = Home;
 
-
-/*
-              <HeatmapLayer
+              /*<HeatmapLayer
                 fitBoundsOnLoad
                 fitBoundsOnUpdate
-                points={addressPoints}
+                points={positions}
                 longitudeExtractor={m => m[1]}
                 latitudeExtractor={m => m[0]}
                 intensityExtractor={m => parseFloat(m[2])} />
-*/
+              */
+
