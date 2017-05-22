@@ -57,6 +57,16 @@ body {
   margin-left: auto;
 }
 
+.leaflet-container
+{
+  height: 400px;
+  width: 100%;
+}
+
+#mapid { height: 800px;
+         width: 100%;
+       }
+
 .nav-container {
   width: 100%;
   border: none;
