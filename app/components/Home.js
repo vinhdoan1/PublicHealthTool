@@ -5,38 +5,50 @@ var React = require('react');
 var Nav = require('./Nav');
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
 
-  //  this.handleSubmit = this.handleSubmit.bind(this);
-  }
+        //  this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-  render() {
+    render() {
 
-    const position = [27.980626, 84.578747];
+        const position = [27.980626, 84.578747];
 
-    return (
-      <div className = 'home-container'>
-        <Nav
-          selected = {0}
-          history={this.props.history}
-        />
-        <Map id="mapid" center={position} zoom={7}>
-          <TileLayer
-            url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <Marker position={position}>
-             <Popup>
-               <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
-             </Popup>
-          </Marker>
-        </Map>
-      </div>
-    )
-  }
+        return (
+          <div className = 'home-container'>
+            <Nav
+              selected = {0}
+              history={this.props.history}
+            />
+            <Map id="mapid" center={position} zoom={7}>
+
+              <TileLayer
+                url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <Marker position={position}>
+                <Popup>
+                  <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
+                </Popup>
+              </Marker>
+            </Map>
+          </div>
+        )
+    }
 }
 
 module.exports = Home;
+
+
+/*
+              <HeatmapLayer
+                fitBoundsOnLoad
+                fitBoundsOnUpdate
+                points={addressPoints}
+                longitudeExtractor={m => m[1]}
+                latitudeExtractor={m => m[0]}
+                intensityExtractor={m => parseFloat(m[2])} />
+*/
