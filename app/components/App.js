@@ -6,6 +6,8 @@ var Switch = ReactRouter.Switch;
 var Data = require('./Data');
 var Home = require('./Home');
 var Input = require('./Input');
+var DataPage = require('./DataPage');
+
 
 class App extends React.Component {
   render() {
@@ -14,9 +16,9 @@ class App extends React.Component {
         <div className='container'>
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route path='/data' component={Data} />
+            <Route exact path='/data' component={Data} />
+            <Route path ='/data/display' component={DataPage} />
             <Route path='/input' component={Input} />
-
             <Route render={function () {
               return <p>Not Found</p>
             }} />
