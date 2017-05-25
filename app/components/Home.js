@@ -23,7 +23,7 @@ class SimpleMap extends React.Component {
       <div className="health-google-maps">
       <GoogleMapReact
         bootstrapURLKeys={{
-          key: '',
+          key: MapsApiKey,
           libraries: 'visualization',
         }}
         defaultCenter={{lat: 2.5, lng: 2.5}}
