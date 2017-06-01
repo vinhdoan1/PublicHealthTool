@@ -48,7 +48,7 @@ class Input extends React.Component {
      {
        key: 'id',
        name: 'ID',
-       width: 80,
+       editable: true,
        resizable: true,
      },
      {

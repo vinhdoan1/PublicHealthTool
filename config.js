@@ -1,5 +1,5 @@
 var config = {
-  googlemapsapikey: "YOUR_KEY_HERE"
+  googlemapsapikey: "AIzaSyC2QZHw320OlKEDIISjYr52_MvqJcuZ1DU"
 };
 
 module.exports = config;
