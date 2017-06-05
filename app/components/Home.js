@@ -9,16 +9,30 @@ const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 class SimpleMap extends React.Component {
 
-  render() {
-    var points = [];
-    for (var i = 0; i < 30; i++)
+  genRandPoints(center, variance, numPoints) {
+    var pList = [];
+  
+    for (var i = 0; i < numPoints; i++)
     {
       var point = {
-        location: [(Math.random() * 3), (Math.random() * 3)],
+        location: [center[0] + (Math.random() * variance - variance/2), center[1] + (Math.random() * variance - variance/2)],
         weight: (Math.random() * 100)
       }
-      points.push(point)
+      pList.push(point)
     }
+
+    return pList;
+  }
+
+  render() {
+    const mapCenter = [28.29406, 84.034008];
+    const centerWest = [29.29406, 82.034008];
+    const centerEast = [27.29406, 86.034008];
+    var pointsWest = this.genRandPoints(centerWest, 2, 50);
+    var pointsEast = this.genRandPoints(centerEast, 2, 50);
+    var points = [];
+    points = pointsWest.concat(pointsEast);
+
     return (
       <div className="health-google-maps">
       <GoogleMapReact
@@ -26,13 +40,13 @@ class SimpleMap extends React.Component {
           key: MapsApiKey,
           libraries: 'visualization',
         }}
-        defaultCenter={{lat: 2.5, lng: 2.5}}
-        defaultZoom={6}
+        defaultCenter={{lat: mapCenter[0], lng: mapCenter[1]}}
+        defaultZoom={7}
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({map, maps}) => {
           const heatmap = new maps.visualization.HeatmapLayer({
             data: points.map(point => (
-              {location: new maps.LatLng(point['location'][1], point['location'][0]),
+              {location: new maps.LatLng(point['location'][0], point['location'][1]),
               weight: point['weight']}))
           });
           heatmap.setMap(map);
