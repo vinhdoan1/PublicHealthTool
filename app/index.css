@@ -76,6 +76,11 @@ body {
   background-color: black;
 }
 
+/* change mobile nav bar */
+.data-container .filter-row .navbar {
+    margin-bottom: 0px;
+    background-color: #337ab7;
+}
 
 /* move sort bar to right */
 .data-content-container .data-sort-by p{
