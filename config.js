@@ -1,5 +1,7 @@
+var api_key = require("./api_key.js");
+
 var config = {
-  googlemapsapikey: "API KEY HERE"
+  googlemapsapikey: api_key
 };
 
 module.exports = config;
