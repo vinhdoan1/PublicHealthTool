@@ -1,5 +1,6 @@
 var React = require('react');
 var NavHealth = require('./Nav');
+var api = require('../utils/api');
 var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
 var FormGroup = require('react-bootstrap').FormGroup;
@@ -193,7 +194,16 @@ class Data extends React.Component {
 
   // when component is created /
   componentDidMount(){
+    api.getAllData()
+      .then(function (data) {
+        this.setState(function () {
+          return {
+            data:data
+          }
+        });
+      }.bind(this));
 
+    /*
     var dummyData = this.createDummyData(500);
     var tags = this.extractTags(dummyData);
     this.setState(function () {
@@ -201,10 +211,11 @@ class Data extends React.Component {
         data: dummyData,
         tags: tags,
       }
-    });
+    }); */
   }
 
   render() {
+    api.getAfflictionList()
     let activePage; // what page pagination is on
     let resultsPerPage; // how many results per page
     let numPages; // total pages for pagination
@@ -287,8 +298,11 @@ class Data extends React.Component {
       tagsString = tagsString.substring(0, tagsString.length - 2);
       let header = (<a href={"/data/display/" + data.dataId}>{data.name}</a>);
 
+      var date = new Date(0); // The 0 there is the key, which sets the date to the epoch
+      date.setUTCMilliseconds(data.date);
+
       return (<Panel header={header} bsStyle="primary" key={data.name}>
-               <p className="updated-date"><b>Updated: </b>{data.date.toDateString()}&nbsp;&nbsp;&nbsp;<b>Views:</b> {data.views}</p>
+               <p className="updated-date"><b>Updated: </b>{date.toDateString()}&nbsp;&nbsp;&nbsp;<b>Views:</b> {data.views}</p>
                  <ShowMore
                    lines={3}
                    more='Show more'
@@ -363,11 +377,13 @@ class Data extends React.Component {
             </Col>
           </Row>
           <Row className="data-row">
-            <Col xsHidden md={4} className="data-tabs">
+            <Col xsHidden md={3} className="data-tabs">
               <h2>Tags</h2>
               <ListGroup>
                 {tagListGroupItemsFiltered}
-                <ListGroupItem bsStyle="info" onClick={() => {this.setState({ tagsModal: true })}}>{"Show All"}</ListGroupItem>
+                {tags.length >  10 &&
+                  <ListGroupItem bsStyle="info" onClick={() => {this.setState({ tagsModal: true })}}>{"Show All"}</ListGroupItem>
+                }
               </ListGroup>
 
               <Modal show={this.state.tagsModal} onHide={()=> this.setState({ tagsModal: !this.state.tagsModal })}>
@@ -381,7 +397,7 @@ class Data extends React.Component {
                 </Modal.Body>
               </Modal>
             </Col>
-            <Col xs={12} md={8} className="data-row-right">
+            <Col xs={12} md={9} className="data-row-right">
               <Row className="results-row">
                 <Col xsHidden md={4} className="results-col">
                   <p> Result(s): {numResults}&nbsp;</p>
@@ -415,7 +431,7 @@ class Data extends React.Component {
                 activePage={activePage}
                 onSelect={this.handlePages} />
               </Col>
-              <Col mdOffset={4} md={6} xs={12}>
+              <Col mdOffset={4} md={6} xs={12} mdHidden lgHidden smHidden>
                 <Pagination
                   prev
                   next
