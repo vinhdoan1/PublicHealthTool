@@ -9,6 +9,7 @@ branches:
     - master
 
 before_script:
+  - npm install -g webpack
   - npm install -g firebase-tools
 
 script:
