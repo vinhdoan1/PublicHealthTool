@@ -3,7 +3,16 @@ node_js:
   - "6"
 env:
   - NODE_ENV=production
-deploy:
-  provider: firebase
-  token:
-    secure: "1/X3Wd1l8dRtc8ixChRUk3VnOUJdQtDJr33y1ix9zFEO"
+
+branches:
+  only:
+    - master
+
+before_script:
+  - npm install -g firebase-tools
+
+script:
+  - npm run build
+
+after_success:
+  - firebase deploy --token 1/X7bTY4KatyuB9Mr-ZCxyCQ68Cinxhyz92bzgdE1ZchcAdkYvXgLQLqIKAZLbvp3L
