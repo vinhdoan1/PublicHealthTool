@@ -63,17 +63,27 @@ body {
   margin-bottom: auto;
 }
 
+/* categories text bigger */
+.data-container .panel-heading a{
+  font-size: 24px;
+}
+
+
 /* vert center text on top bar*/
 .data-content-container .results-row p{
   margin-top: auto;
   margin-bottom: auto;
 }
 
-/* change tag link color */
+/* change tag X link color */
+.data-content-container .results-row .categories-x{
+  background-color: black;
+}
+
+/* change tag X link color */
 .data-content-container .results-row a{
   color: white;
   text-decoration: none;
-  background-color: black;
 }
 
 /* change mobile nav bar */
