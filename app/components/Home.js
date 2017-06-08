@@ -1,5 +1,10 @@
 var React = require('react');
+var Row = require('react-bootstrap').Row;
+var Col = require('react-bootstrap').Col;
 var Nav = require('./Nav');
+var InputGroup = require('react-bootstrap').InputGroup;
+var Glyphicon = require('react-bootstrap').Glyphicon;
+var FormControl = require('react-bootstrap').FormControl;
 var MapsApiKey = require('../../config').googlemapsapikey;
 
 import GoogleMapReact from 'google-map-react';
@@ -35,29 +40,43 @@ class SimpleMap extends React.Component {
 
     return (
       <div className="health-google-maps">
-      <GoogleMapReact
-        bootstrapURLKeys={{
-          key: MapsApiKey,
-          libraries: 'visualization',
-        }}
-        defaultCenter={{lat: mapCenter[0], lng: mapCenter[1]}}
-        defaultZoom={7}
-        yesIWantToUseGoogleMapApiInternals
-        onGoogleApiLoaded={({map, maps}) => {
-          const heatmap = new maps.visualization.HeatmapLayer({
-            data: points.map(point => (
-              {location: new maps.LatLng(point['location'][0], point['location'][1]),
-              weight: point['weight']}))
-          });
-          heatmap.setMap(map);
-        }}
-      >
-        <AnyReactComponent
-          lat={59.955413}
-          lng={30.337844}
-          text={'Kreyser Avrora'}
-        />
-      </GoogleMapReact>
+        <Row className="map-row">
+          <Col xs={2} md={3}>
+             <InputGroup>
+               <InputGroup.Addon><Glyphicon glyph="search" /></InputGroup.Addon>
+               <FormControl
+                 type="text"
+                 label="Text"
+                 placeholder="Search"
+                 onChange={this.handleSearch}/>
+               </InputGroup>
+          </Col>
+          <Col className="map-col" xs={10} md={9}>
+          <GoogleMapReact
+            bootstrapURLKeys={{
+              key: MapsApiKey,
+              libraries: 'visualization',
+            }}
+            defaultCenter={{lat: mapCenter[0], lng: mapCenter[1]}}
+            defaultZoom={7}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({map, maps}) => {
+              const heatmap = new maps.visualization.HeatmapLayer({
+                data: points.map(point => (
+                  {location: new maps.LatLng(point['location'][0], point['location'][1]),
+                  weight: point['weight']}))
+              });
+              heatmap.setMap(map);
+            }}
+          >
+          <AnyReactComponent
+            lat={59.955413}
+            lng={30.337844}
+            text={'Kreyser Avrora'}
+          />
+          </GoogleMapReact>
+          </Col>
+        </Row>
       </div>
     );
   }
@@ -73,7 +92,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(MapsApiKey);
     return (
       <div className = 'home-container'>
         <Nav
