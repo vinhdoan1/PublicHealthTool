@@ -80,18 +80,6 @@ body {
     background-color: #337ab7;
 }
 
-.map-row {
-  margin-top: 10px;
-  margin-right: 5px;
-  height: 600px;
-}
-
-.map-col {
-  border-style: groove;
-  border-width: 4px;
-  border-color: #999999
-}
-
 /* move sort bar to right */
 .data-content-container .data-sort-by p{
   margin-left: auto;
@@ -142,6 +130,22 @@ body {
 .data-content-container hr {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.home-row {
+  margin-top: 10px;
+  margin-right: 5px;
+  height: 600px;
+}
+
+.home-map-col {
+  border-style: groove;
+  border-width: 4px;
+  border-color: #999999
+}
+
+.home-search-col {
+  margin-left: 10px;
 }
 
 .input-container hr {

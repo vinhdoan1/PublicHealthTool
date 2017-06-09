@@ -5,6 +5,8 @@ var Nav = require('./Nav');
 var InputGroup = require('react-bootstrap').InputGroup;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var FormControl = require('react-bootstrap').FormControl;
+var ListGroup = require('react-bootstrap').ListGroup;
+var ListGroupItem = require('react-bootstrap').ListGroupItem;
 var MapsApiKey = require('../../config').googlemapsapikey;
 
 import GoogleMapReact from 'google-map-react';
@@ -13,6 +15,12 @@ const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 
 class SimpleMap extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
 
   genRandPoints(center, variance, numPoints) {
     var pList = [];
@@ -37,11 +45,14 @@ class SimpleMap extends React.Component {
     var pointsEast = this.genRandPoints(centerEast, 2, 50);
     var points = [];
     points = pointsWest.concat(pointsEast);
+    var categories = [ <ListGroupItem>Diseases</ListGroupItem>,
+                       <ListGroupItem>Health</ListGroupItem>,
+                       <ListGroupItem>Sanitation</ListGroupItem>, ];
 
     return (
       <div className="health-google-maps">
-        <Row className="map-row">
-          <Col xs={2} md={3}>
+        <Row className="home-row">
+          <Col className="home-search-col" xs={2} md={3}>
              <InputGroup>
                <InputGroup.Addon><Glyphicon glyph="search" /></InputGroup.Addon>
                <FormControl
@@ -50,8 +61,11 @@ class SimpleMap extends React.Component {
                  placeholder="Search"
                  onChange={this.handleSearch}/>
                </InputGroup>
+               <ListGroup>
+                 { categories }
+               </ListGroup>
           </Col>
-          <Col className="map-col" xs={10} md={9}>
+          <Col className="home-map-col" xs={10} md={9}>
           <GoogleMapReact
             bootstrapURLKeys={{
               key: MapsApiKey,
