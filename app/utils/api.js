@@ -1,6 +1,6 @@
 var axios = require('axios');
 
-function getAfflictionList() {
+function getCategories() {
   return axios.get('https://eng100d-project.herokuapp.com/list')
     .then(function (user) {
       return user.data;
@@ -14,9 +14,17 @@ function getAllData() {
     });
 }
 
+function getDataFromAffliction(type, affliction) {
+  return axios.get('https://eng100d-project.herokuapp.com/data/' + type + '/' + affliction)
+    .then(function (user) {
+      return user.data;
+    });
+}
+
 
 
 module.exports = {
-  getAfflictionList: getAfflictionList,
+  getCategories: getCategories,
   getAllData: getAllData,
+  getDataFromAffliction: getDataFromAffliction,
 };
