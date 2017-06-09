@@ -83,6 +83,7 @@ class Data extends React.Component {
     {
       var querystring = queryString.parse(this.props.location.hash);
       querystring.tags = undefined;
+      querystring.page = undefined;
       var hashqs = queryString.stringify(querystring)
       location.hash = '#' + hashqs;
       return;
@@ -90,6 +91,7 @@ class Data extends React.Component {
     // change hash with new page, while keeping old other hash query string
     var querystring = queryString.parse(this.props.location.hash);
     querystring.tags = e;
+    querystring.page = undefined;
     var hashqs = queryString.stringify(querystring)
     location.hash = '#' + hashqs;
     window.scrollTo(0, 0); // scroll to top as well

@@ -49,6 +49,7 @@
     "react-data-grid": "^2.0.41",
     "react-dom": "^15.5.4",
     "react-edit-inline": "^1.0.8",
-    "react-router-dom": "^4.0.0"
+    "react-router-dom": "^4.0.0",
+    "request": "^2.81.0"
   }
 }
