@@ -22,10 +22,16 @@ var Nav = require('react-bootstrap').Nav;
 var NavItem = require('react-bootstrap').NavItem;
 var NavDropdown = require('react-bootstrap').NavDropdown;
 var MenuItem = require('react-bootstrap').MenuItem;
+import GoogleLogin from 'react-google-login';
+
 
 
 import ShowMore from 'react-show-more';
 var queryString = require('query-string');
+
+const responseGoogle = (response) => {
+  console.log(response);
+}
 
 class Data extends React.Component {
   constructor(props) {
@@ -100,18 +106,18 @@ class Data extends React.Component {
   // onChange for tags
   handleCategories(e)
   {
+    var querystring = queryString.parse(this.props.location.hash);
+    querystring.page = undefined;
     //tag's X just clicked
     if (e == -1)
     {
-      var querystring = queryString.parse(this.props.location.hash);
       querystring.category = undefined;
-      var hashqs = queryString.stringify(querystring)
-      location.hash = '#' + hashqs;
-      return;
     }
-    // change hash with new page, while keeping old other hash query string
-    var querystring = queryString.parse(this.props.location.hash);
-    querystring.category = e;
+    else
+    {
+      // change hash with new page, while keeping old other hash query string
+      querystring.category = e;
+    }
     var hashqs = queryString.stringify(querystring)
     location.hash = '#' + hashqs;
   //  window.scrollTo(0, 0); // scroll to top as well
@@ -168,6 +174,7 @@ class Data extends React.Component {
     // change hash with new page, while keeping old other hash query string
     var querystring = queryString.parse(this.props.location.hash);
     querystring.sort = e.target.value; // get index of which sort
+    querystring.page = undefined;
     var hashqs = queryString.stringify(querystring)
     location.hash = '#' + hashqs;
   }
@@ -178,6 +185,7 @@ class Data extends React.Component {
     // change hash with new page, while keeping old other hash query string
     var querystring = queryString.parse(this.props.location.hash);
     querystring.sort = e; // get index of which sort
+    querystring.page = undefined;
     var hashqs = queryString.stringify(querystring)
     location.hash = '#' + hashqs;
   }
@@ -440,6 +448,12 @@ class Data extends React.Component {
 
     return (
       <div className = 'data-container'>
+        <GoogleLogin
+    clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+    buttonText="Login"
+    onSuccess={responseGoogle}
+    onFailure={responseGoogle}
+  />
         {/* nav bar */}
         <NavHealth
           selected = {1}
