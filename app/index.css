@@ -90,6 +90,51 @@ body {
     background-color: #337ab7;
 }
 
+/* change mobile nav bar text color */
+.data-container .filter-row .navbar .nav{
+   margin-bottom: 0px;
+   margin-top: 0px;
+}
+
+/* change mobile nav bar text color */
+.data-container .filter-row .navbar a{
+   color: white;
+}
+
+/* change mobile nav bar text color */
+.data-container .filter-row .navbar-toggle{
+   background-color: rgba(0, 0, 0, 0.33);
+}
+
+/* change mobile nav bar text color */
+.data-container .filter-row .navbar .dropdown-menu a{
+   color: white;
+}
+
+/* change mobile nav bar */
+.data-container .filter-row .dropdown #basic-nav-dropdown{
+   background-color: rgba(0, 0, 0, 0.33);
+}
+
+/* change mobile nav bar */
+.data-container .filter-row .dropdown .dropdown-menu{
+   background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* change mobile nav bar */
+.data-container .filter-row .dropdown .dropdown-menu li a{
+   color: white;
+}
+/* change mobile nav bar hover */
+.data-container .filter-row .dropdown .dropdown-menu li:hover{
+   background-color: rgba(0, 0, 0, 0.1);
+}
+/* change mobile nav bar active */
+.data-container .filter-row .dropdown .dropdown-menu .active a {
+   background-color: rgba(0, 0, 0, 0.1);
+}
+
+
 .map-row {
   margin-top: 10px;
   margin-right: 5px;

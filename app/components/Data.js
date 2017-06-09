@@ -46,6 +46,8 @@ class Data extends React.Component {
     this.handleSortType = this.handleSortType.bind(this);
     //this.handleTags = this.handleTags.bind(this);
     this.handleCategories = this.handleCategories.bind(this);
+    this.handleCategoriesMobile = this.handleCategoriesMobile.bind(this);
+    this.handleSortTypeMobile = this.handleSortTypeMobile.bind(this);
   }
 
   createDummyData(num)
@@ -113,6 +115,14 @@ class Data extends React.Component {
   //  window.scrollTo(0, 0); // scroll to top as well
   }
 
+  handleCategoriesMobile(e)
+  {
+    if (e === "All")
+      this.handleCategories(-1)
+    else {
+      this.handleCategories(e)
+    }
+  }
   // on change for search bar
   handleSearch(e)
   {
@@ -156,6 +166,16 @@ class Data extends React.Component {
     // change hash with new page, while keeping old other hash query string
     var querystring = queryString.parse(this.props.location.hash);
     querystring.sort = e.target.value; // get index of which sort
+    var hashqs = queryString.stringify(querystring)
+    location.hash = '#' + hashqs;
+  }
+
+  // onChange for results per page
+  handleSortTypeMobile(e)
+  {
+    // change hash with new page, while keeping old other hash query string
+    var querystring = queryString.parse(this.props.location.hash);
+    querystring.sort = e; // get index of which sort
     var hashqs = queryString.stringify(querystring)
     location.hash = '#' + hashqs;
   }
@@ -370,7 +390,7 @@ class Data extends React.Component {
 
         tagsString = tagsString.substring(0, tagsString.length - 2);
         */
-        console.log(encodeURIComponent(data.affliction))
+
         let header = (<div><a href={"/data/display/" + data.type + "/" + encodeURIComponent(data.affliction)}>{data.name}</a> <Label>{data.type}</Label></div> );
 
         var date = new Date(0); // The 0 there is the key, which sets the date to the epoch
@@ -397,9 +417,24 @@ class Data extends React.Component {
       return (<option value={num} key={num}>{"Display " + num + " Results Per Page"}</option>);
     })
 
-    let sortOptions = this.state.sorts.map(function(num, i) {
-      return (<option value={i} key={i}>{num}</option>);
+    let sortOptions = this.state.sorts.map(function(opt, i) {
+      return (<option value={i} key={i}>{opt}</option>);
     })
+
+    //for mobile bar
+    let sortOptionsMobile = this.state.sorts.map(function(option, i) {
+      return (<MenuItem key={i} active={(option === sortType)}onClick={() => {this.handleSortTypeMobile(option)}}>{option}</MenuItem>);
+    }.bind(this))
+
+    //for mobile bar, have to add an All too
+    let categoriesWithAll = [{name:"All",count: this.state.data.length}].concat(this.state.categories)
+    let categoriesMobile = categoriesWithAll.map(function(categ, i) {
+      var name = categ.name;
+      var count = categ.count;
+      //set active to current selected of all if none
+      var active = ((name === category) || (name === "All" && category === -1))
+      return (<MenuItem key={name} active={active} onClick={() => {this.handleCategoriesMobile(name)}}>{name + " (" + count + ")"}</MenuItem>);
+    }.bind(this))
 
     return (
       <div className = 'data-container'>
@@ -420,19 +455,12 @@ class Data extends React.Component {
               </Navbar.Header>
               <Navbar.Collapse>
                 <Nav>
-                  <NavItem eventKey={1} href="#">Link</NavItem>
-                  <NavItem eventKey={2} href="#">Link</NavItem>
-                  <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                    <MenuItem eventKey={3.1}>Action</MenuItem>
-                    <MenuItem eventKey={3.2}>Another action</MenuItem>
-                    <MenuItem eventKey={3.3}>Something else here</MenuItem>
-                    <MenuItem divider />
-                    <MenuItem eventKey={3.3}>Separated link</MenuItem>
+                  <NavDropdown eventKey={3} title="Sort By" id="basic-nav-dropdown">
+                    {sortOptionsMobile}
                   </NavDropdown>
-                </Nav>
-                <Nav pullRight>
-                  <NavItem eventKey={1} href="#">Link Right</NavItem>
-                  <NavItem eventKey={2} href="#">Link Right</NavItem>
+                  <NavDropdown eventKey={2} title="Categories" id="basic-nav-dropdown">
+                    {categoriesMobile}
+                  </NavDropdown>
                 </Nav>
               </Navbar.Collapse>
             </Navbar>
