@@ -150,7 +150,7 @@ class SimpleMap extends React.Component {
       (data.description.toLowerCase().indexOf(search) >= 0);
     });
 
-    renderList.push(<ListGroupItem className="home-category-list-item" key={categ.name} onClick={() => {this.handleCategoriesClick(categ.name);}}>{categ.name + " (" + filteredData.length + ")"}</ListGroupItem>);
+    renderList.push(<ListGroupItem className="home-category-list-item" key={categ.name} onClick={() => {this.handleCategoriesClick(categ.name);}}><font color="white">{categ.name + " (" + filteredData.length + ")"}</font></ListGroupItem>);
 
     if(categ.isVisible)
     {

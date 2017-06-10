@@ -188,19 +188,16 @@ body {
 
 .home-categories-list {
   margin-top: 10px;
+  color: white;
 }
 
 .home-category-list-item {
-  /*margin-bottom: 10px;*/
   font-weight: bold;
-  border-radius: 2px;
-  background-color: lightblue;
-  color: blue;
-}
-
-.home-category-list-item:hover {
-  background-color: red;
-  color: red;
+  font-size: 18px;
+  color: white;
+  border-radius: 5px;
+  background-color: #337Ab7;
+  margin-bottom: 1px
 }
 
 .home-row {
