@@ -197,7 +197,7 @@ body {
   border-radius: 5px;
   border-width: 2px;
   border-color: lightblue;
-  background-color: #337Ab7;
+  background-color: #337AB7;
 }
 
 .list-group-item.home-category-list-item:hover {
@@ -205,7 +205,8 @@ body {
 }
 
 .list-group-item.home-category-list-item:focus {
-  background-color: darkblue;
+  outline: none;
+  background-color: #337AB7;
 }
 
 .home-row {
