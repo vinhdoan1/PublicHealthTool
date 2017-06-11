@@ -3,6 +3,8 @@ var NavLink = require('react-router-dom').NavLink;
 var PropTypes = require('prop-types');
 var Tabs = require('react-bootstrap').Tabs;
 var Tab = require('react-bootstrap').Tab;
+var Button = require('react-bootstrap').Button;
+
 
 class Nav extends React.Component {
   constructor(props) {
@@ -38,6 +40,8 @@ class Nav extends React.Component {
     var tabComponent = tabs.map(function(tab, i) {
       return (<Tab eventKey={i} title={tab} key={i}></Tab>);
     });
+
+    var test = () => {console.log("Yooo")}
 
     return (
       <div className = 'nav-container'>

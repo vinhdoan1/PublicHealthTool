@@ -16,12 +16,13 @@ class SimpleMap extends React.Component {
 
   genRandPoints(center, variance, numPoints) {
     var pList = [];
-  
+
     for (var i = 0; i < numPoints; i++)
     {
       var point = {
         location: [center[0] + (Math.random() * variance - variance/2), center[1] + (Math.random() * variance - variance/2)],
-        weight: (Math.random() * 100)
+        weight: (Math.random() * 100),
+        districtName: "test"
       }
       pList.push(point)
     }

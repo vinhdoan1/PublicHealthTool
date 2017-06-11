@@ -10,7 +10,10 @@ class DataPage extends React.Component {
     super(props);
     this.state = {
       name: "",
-      data: {},
+      description: "",
+      category: "",
+      date: 0,
+      views: 0,
       columns: [],
       rows: [],
     };
@@ -18,38 +21,7 @@ class DataPage extends React.Component {
     this.rowGetter = this.rowGetter.bind(this);
   }
 
-  convertColsForGrid(cols)
-  {
-    var gridCols = []
-    for (var i = 0; i < cols.length; i++)
-    {
-      var gridCol = {
-        key: cols[i],
-        name: cols[i],
-        editable: false,
-        resizable: true,
-      }
-      gridCols.push(gridCol)
-    }
-    return gridCols;
-  }
 
-  convertRowsForGrid(rows)
-  {
-
-    var gridRows = []
-    for (var i = 0; i < rows.length; i++)
-    {
-      var gridRow = {
-        Name: "test",
-        Indicator: "test2",
-        Value: "test3",
-      }
-      gridRows.push(gridRow)
-      //gridRows.push(rows[i])
-    }
-    return gridRows;
-  }
 
   rowGetter(i) {
     return this.state.rows[i];
@@ -62,29 +34,32 @@ class DataPage extends React.Component {
     var type = urlsplit[3];
     var affliction = urlsplit[4];
 
+    api.getMapDataFromAffliction(type, affliction)
+    .then(
+      function (data) {
+        //  console.log(data)
+    }.bind(this));
+
     api.getDataFromAffliction(type, affliction)
     .then(
       function (data) {
-        var cols = data.cols;
-        var rows = JSON.parse(data.rows);
-        var gridCols = this.convertColsForGrid(cols);
-      //  var gridRows = this.convertRowsForGrid(rows);
         this.setState(function () {
           return {
-            columns: gridCols,
-            rows: rows
+            name: data.name,
+            description: data.description,
+            category: data.category,
+            views: data.views,
+            date: data.date,
+            columns: data.columns,
+            rows: data.rows,
           }
         });
       }.bind(this));
 
-    this.setState(function () {
-      return {
-        name: affliction,
-      }
-    });
   }
 
   render() {
+      console.log(this.state);
     return (
       <div className = 'data-page-container'>
         <Nav

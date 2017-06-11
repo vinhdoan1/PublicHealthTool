@@ -22,7 +22,6 @@ var Nav = require('react-bootstrap').Nav;
 var NavItem = require('react-bootstrap').NavItem;
 var NavDropdown = require('react-bootstrap').NavDropdown;
 var MenuItem = require('react-bootstrap').MenuItem;
-import GoogleLogin from 'react-google-login';
 
 
 
@@ -288,7 +287,7 @@ class Data extends React.Component {
             data:data
           }
         });
-      }.bind(this));
+    }.bind(this));
 
       /*
       var dummyData = this.createDummyData(500);
@@ -448,12 +447,6 @@ class Data extends React.Component {
 
     return (
       <div className = 'data-container'>
-        <GoogleLogin
-    clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-    buttonText="Login"
-    onSuccess={responseGoogle}
-    onFailure={responseGoogle}
-  />
         {/* nav bar */}
         <NavHealth
           selected = {1}
