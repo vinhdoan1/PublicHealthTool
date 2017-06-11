@@ -204,9 +204,18 @@ body {
   background-color: darkblue;
 }
 
-.list-group-item.home-category-list-item:focus {
+.list-group-item.home-category-list-item:focus:not(:hover) {
   outline: none;
   background-color: #337AB7;
+}
+
+.list-group-item.home-tag-list-item {
+  font-weight: normal;
+}
+
+.list-group-item.home-tag-list-item:focus {
+  outline: none;
+  font-weight: bold;
 }
 
 .home-row {
