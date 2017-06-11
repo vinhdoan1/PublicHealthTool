@@ -75,13 +75,13 @@ function getDataFromAffliction(type, affliction) {
 }
 
 function getMapDataFromAffliction(type, affliction) {
-  return axios.get('https://eng100d-project.herokuapp.com/list/' + type + '/' + affliction)
+  var url = 'https://eng100d-project.herokuapp.com/list/' + type + '/' + encodeURIComponent(affliction);
+  console.log(url);
+  return axios.get(url)
     .then(function (user) {
       return convertMapData(user.data);
     });
 }
-
-
 
 module.exports = {
   getCategories: getCategories,

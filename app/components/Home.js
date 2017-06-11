@@ -186,7 +186,7 @@ class SimpleMap extends React.Component {
     {
       for(var i = 0; i < filteredData.length; i++)
       {
-        var dataPoint = filteredData[i];
+        let dataPoint = filteredData[i];
         renderList.push((<ListGroupItem className="home-tag-list-item" onClick={() => {this.handleAfflictionClick(dataPoint.type, dataPoint.affliction);}}>{dataPoint.name}</ListGroupItem>));
       }
     }
