@@ -35,6 +35,7 @@ function convertColsForGrid(cols, editable)
       name: cols[i],
       editable: editable,
       resizable: true,
+      sortable: true,
     }
     gridCols.push(gridCol)
   }
@@ -80,6 +81,7 @@ function getMapDataFromAffliction(type, affliction) {
   var url = 'https://eng100d-project.herokuapp.com/list/' + type + '/' + encodeURIComponent(affliction);
   return axios.get(url)
     .then(function (user) {
+      console.log(user.data)
       return convertMapData(user.data);
     });
 }

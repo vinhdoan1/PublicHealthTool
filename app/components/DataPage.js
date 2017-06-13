@@ -31,10 +31,26 @@ class DataPage extends React.Component {
       views: 0,
       columns: [],
       rows: [],
+      originalRows: [],
       loading: true,
     };
 
     this.rowGetter = this.rowGetter.bind(this);
+    this.handleGridSort = this.handleGridSort.bind(this);
+  }
+
+  handleGridSort(sortColumn, sortDirection) {
+    const comparer = (a, b) => {
+      if (sortDirection === 'ASC') {
+        return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
+      } else if (sortDirection === 'DESC') {
+        return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
+      }
+    };
+
+    const rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer);
+
+    this.setState({ rows });
   }
 
 
@@ -56,6 +72,7 @@ class DataPage extends React.Component {
         var newViews = data.views + 1;
         var newData = {
           ...data,
+          originalRows: data.rows.slice(),
           views: newViews,
         }
         // Change views
@@ -113,6 +130,7 @@ class DataPage extends React.Component {
               <Well>{this.state.description}</Well>
               <ReactDataGrid
                 enableCellSelect={true}
+                onGridSort={this.handleGridSort}
                 columns={this.state.columns}
                 rowGetter={this.rowGetter}
                 rowsCount={this.state.rows.length}

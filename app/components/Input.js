@@ -73,6 +73,7 @@ class Input extends React.Component {
     this.deleteSelectedRows = this.deleteSelectedRows.bind(this);
     this.readFileAndSetData = this.readFileAndSetData.bind(this);
     this.resetFields = this.resetFields.bind(this);
+    this.handleGridSort = this.handleGridSort.bind(this);
   }
 
   componentDidMount() {
@@ -137,6 +138,20 @@ class Input extends React.Component {
  handleSourceChange(e)
  {
    this.setState({ source: e.target.value });
+ }
+
+ handleGridSort(sortColumn, sortDirection) {
+   const comparer = (a, b) => {
+     if (sortDirection === 'ASC') {
+       return (a[sortColumn] > b[sortColumn]) ? 1 : -1;
+     } else if (sortDirection === 'DESC') {
+       return (a[sortColumn] < b[sortColumn]) ? 1 : -1;
+     }
+   };
+
+   const rows = sortDirection === 'NONE' ? this.state.prevRows.slice(0) : this.state.rows.sort(comparer);
+
+   this.setState({ rows });
  }
 
  getRandomDate(start, end) {
@@ -520,6 +535,7 @@ class Input extends React.Component {
                     columns={this.state.columns}
                     rowGetter={this.rowGetter}
                     rowsCount={this.getSize()}
+                    onGridSort={this.handleGridSort}
                     minHeight={500}
                     onGridRowsUpdated={this.handleGridRowsUpdated}
                     rowSelection={{

@@ -378,6 +378,7 @@ class Data extends React.Component {
       });
       */
       //if tag chosen, filter out tags only
+
       let filteredData = this.state.data.filter(function(data){
         if (tags === -1 && category == -1)
           return true;
