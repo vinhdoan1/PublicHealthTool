@@ -406,7 +406,11 @@ class Input extends React.Component {
             selected = {2}
             history={this.props.history}
           />
-          <p>Access Restricted</p>
+        <center>
+          <br/>
+          <p>{"Access Restricted: Please Sign In as a One Step User."}</p>
+        </center>
+          <div className="long-space"></div>
         </div>)
     }
 

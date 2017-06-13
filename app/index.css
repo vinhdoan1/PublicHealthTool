@@ -427,7 +427,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.loading-container .long-space {
+.long-space {
   height: 100vh;
 }
 

@@ -31,7 +31,7 @@ class GoogleLoginComponent extends React.Component {
    var emailAccount = email.substring(email.indexOf("@") + 1);
 
     var user = {
-      isOneStep: (emailAccount === "onestepprojects.org" || otherEmails.indexOf(email) != -1),
+      isOneStep: (emailAccount === "onestepprojects.org" || emailAccount === "ucsd.edu" || otherEmails.indexOf(email) != -1),
       firstName: response.profileObj.givenName,
       lastName: response.profileObj.familyName,
     }

@@ -57,7 +57,7 @@ Loading.propTypes = {
 
 Loading.defaultProps = {
   text: 'Loading',
-  speed: 100
+  speed: 200
 };
 
 module.exports = Loading;

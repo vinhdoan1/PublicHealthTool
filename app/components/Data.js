@@ -574,7 +574,7 @@ class Data extends React.Component {
                   </Col>
                 </Row>
                 <Row className="data-nav-row">
-                  <Col mdOffset={4} md={6} xsHidden>
+                  <Col mdOffset={3} md={6} xsHidden>
                     <Pagination
                       prev
                       next
@@ -587,7 +587,7 @@ class Data extends React.Component {
                       activePage={activePage}
                       onSelect={this.handlePages} />
                   </Col>
-                  <Col mdOffset={4} md={6} xs={12} mdHidden lgHidden smHidden>
+                  <Col mdOffset={3} md={6} xs={12} mdHidden lgHidden smHidden>
                     <Pagination
                       prev
                       next
