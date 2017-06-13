@@ -91,7 +91,6 @@ function setInfo(type, affliction, data) {
   });
 }
 
-
 module.exports = {
   getCategories: getCategories,
   getAllData: getAllData,
