@@ -78,14 +78,12 @@ function getDataFromAffliction(type, affliction, editable) {
 
 function getMapDataFromAffliction(type, affliction) {
   var url = 'https://eng100d-project.herokuapp.com/list/' + type + '/' + encodeURIComponent(affliction);
-  console.log(url);
   return axios.get(url)
     .then(function (user) {
       return convertMapData(user.data);
     });
 }
 
-<<<<<<< HEAD
 function setInfo(type, affliction, data) {
   return axios.post('https://eng100d-project.herokuapp.com/edit/info/' + type + '/' + affliction, data)
   .catch(function (error) {
@@ -94,9 +92,6 @@ function setInfo(type, affliction, data) {
 }
 
 
-
-=======
->>>>>>> af03e7576dff1995bfcfb6c0fa8dea68ea9ac58e
 module.exports = {
   getCategories: getCategories,
   getAllData: getAllData,
