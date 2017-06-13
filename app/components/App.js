@@ -7,6 +7,8 @@ var Data = require('./Data');
 var Home = require('./Home');
 var Input = require('./Input');
 var DataPage = require('./DataPage');
+var BottomBar = require('./BottomBar');
+
 
 
 class App extends React.Component {
@@ -23,6 +25,7 @@ class App extends React.Component {
               return <p>Not Found</p>
             }} />
           </Switch>
+          <BottomBar/>
         </div>
       </Router>
     )

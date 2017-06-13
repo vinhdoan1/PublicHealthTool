@@ -4,7 +4,7 @@ var PropTypes = require('prop-types');
 var styles = {
   content: {
     textAlign: 'center',
-    fontSize: '35px'
+    fontSize: '20px'
   }
 };
 
@@ -38,10 +38,14 @@ class Loading extends React.Component {
     window.clearInterval(this.interval);
   }
   render() {
+    var height = isNaN(window.innerHeight) ? window.clientHeight : window.innerHeight;
     return (
+      <div className="loading-container">
       <p style={styles.content}>
         {this.state.text}
       </p>
+      <div className="long-space"></div>
+      </div>
     )
   }
 }
@@ -53,7 +57,7 @@ Loading.propTypes = {
 
 Loading.defaultProps = {
   text: 'Loading',
-  speed: 300
+  speed: 100
 };
 
 module.exports = Loading;

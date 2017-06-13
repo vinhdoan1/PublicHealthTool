@@ -3,11 +3,20 @@ var ReactDOM = require('react-dom');
 require('./index.css');
 require('./mobile.css');
 var App = require('./components/App');
-import { createStore } from 'redux'
+
+import { applyMiddleware, compose, createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
+import {persistStore, autoRehydrate} from 'redux-persist'
 
-const store = createStore(reducer)
+const store = createStore(
+  reducer,
+  undefined,
+  compose(
+    applyMiddleware(),
+    autoRehydrate()
+  )
+)
 
 ReactDOM.render(
   <Provider store={store}>
@@ -15,3 +24,5 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('app')
 );
+
+persistStore(store)

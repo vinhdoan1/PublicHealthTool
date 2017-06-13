@@ -9,10 +9,24 @@ var config = {
     filename: 'index_bundle.js',
     publicPath: '/'
   },
+
   module: {
     rules: [
       { test: /\.(js)$/, use: 'babel-loader' },
-      { test: /\.css$/, use: [ 'style-loader', 'css-loader' ]}
+      { test: /\.css$/, use: [ 'style-loader', 'css-loader' ]},
+      { test: /\.(png|jpg)$/, use: ['url-loader']}
+    ],
+    loaders: [
+      {
+        test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192' ,
+        query: {
+          plugins: ['transform-decorators-legacy']
+        },
+        include: [
+                path.resolve(__dirname, 'path/to/imported/file/dir'),
+            ],
+        loader: 'babel-loader',
+      }
     ]
   },
   devServer: {

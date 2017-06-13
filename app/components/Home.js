@@ -20,6 +20,10 @@ class SimpleMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      map: undefined,
+      heatmap: undefined,
+      mapsApi: undefined,
+      mapCenter: {lat: 28.29406, lng: 84.034008},
       search: "",
       data: [],
       categories: [],
@@ -69,7 +73,17 @@ class SimpleMap extends React.Component {
           }
         });
       }.bind(this));
-    }
+  }
+
+  initHeatMap(points)
+  {
+    return new this.state.mapsApi.visualization.HeatmapLayer({
+      data: points.map(point => (
+        {location: new this.state.mapsApi.LatLng(point['location'][0], point['location'][1]),
+        weight: point['weight']})),
+      map: this.map
+    });
+  }
 
   // on change for search bar
   handleSearch(e)
@@ -84,6 +98,27 @@ class SimpleMap extends React.Component {
         search: result,
       }
     });
+  }
+
+  // onClick for affliction
+  handleAfflictionClick(type, affliction)
+  {
+    api.getMapDataFromAffliction(type, affliction)
+      .then(
+        function (mapPoints) {
+          var map = this.state.map;
+          this.state.heatmap.setMap(null);  // delete old heatmap layer
+          var heatmap = this.initHeatMap(mapPoints);
+          heatmap.setMap(map);
+          this.state.heatmap = heatmap;
+
+          this.setState(function() {
+            return {
+              map: map,
+              heatmap: heatmap
+            }
+          });
+        }.bind(this));
   }
 
   // onClick for categories
@@ -126,13 +161,7 @@ class SimpleMap extends React.Component {
   }
 
   render() {
-    const mapCenter = [28.29406, 84.034008];
-    const centerWest = [29.29406, 82.034008];
-    const centerEast = [27.29406, 86.034008];
-    var pointsWest = this.genRandPoints(centerWest, 2, 50);
-    var pointsEast = this.genRandPoints(centerEast, 2, 50);
     var points = [];
-    points = pointsWest.concat(pointsEast);
 
     var search = this.state.search.toLowerCase();
 
@@ -157,7 +186,8 @@ class SimpleMap extends React.Component {
     {
       for(var i = 0; i < filteredData.length; i++)
       {
-        renderList.push((<ListGroupItem className="home-tag-list-item" onClick={() => {this.handleTagClick();}}>{filteredData[i].name}</ListGroupItem>));
+        let dataPoint = filteredData[i];
+        renderList.push((<ListGroupItem className="home-tag-list-item" onClick={() => {this.handleAfflictionClick(dataPoint.type, dataPoint.affliction);}}>{dataPoint.name}</ListGroupItem>));
       }
     }
 
@@ -171,6 +201,9 @@ class SimpleMap extends React.Component {
     {
       displayList = displayList.concat(itemsToDisplay[i]);
     }
+
+    console.log("map val = " + this.state.map);
+    console.log("heatmap val = " + this.state.heatmap);
 
     return (
       <div className="health-google-maps">
@@ -194,7 +227,7 @@ class SimpleMap extends React.Component {
               key: MapsApiKey,
               libraries: 'visualization',
             }}
-            defaultCenter={{lat: mapCenter[0], lng: mapCenter[1]}}
+            defaultCenter={this.state.mapCenter}
             defaultZoom={7}
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({map, maps}) => {
@@ -204,6 +237,11 @@ class SimpleMap extends React.Component {
                   weight: point['weight']}))
               });
               heatmap.setMap(map);
+
+              console.log("init map states");
+              this.state.map = map;
+              this.state.heatmap = heatmap;
+              this.state.mapsApi = maps;
             }}
           >
           <AnyReactComponent

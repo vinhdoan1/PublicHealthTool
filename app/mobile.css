@@ -28,4 +28,32 @@
     padding-right: 0px;
   }
 
+  .nav-container h1{
+  width: 30%;
+  margin-left: 2px;
+  margin-bottom: auto;
+  font-size: 25px;
+  text-align: center;
+  }
+
+  .bottom-container img{
+    height: 50px;
+  }
+
+  .bottom-container {
+    height: 100px;
+  }
+
+  .bottom-container .right-bottom{
+    position: absolute;
+    right: 5px;
+    margin-top: 5px;
+  }
+
+  .bottom-container .left-bottom{
+    position: absolute;
+    left: 5px;
+    margin-top: 5px;
+  }
+
 }

@@ -3,10 +3,14 @@ var NavLink = require('react-router-dom').NavLink;
 var PropTypes = require('prop-types');
 var Tabs = require('react-bootstrap').Tabs;
 var Tab = require('react-bootstrap').Tab;
+var Nav = require('react-bootstrap').Nav;
+var NavItem = require('react-bootstrap').NavItem;
 var Button = require('react-bootstrap').Button;
+//import GoogleLogin from 'react-google-login';
+var GoogleLoginComponent = require('./GoogleLoginComponent');
 
 
-class Nav extends React.Component {
+class NavHealth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,29 +39,29 @@ class Nav extends React.Component {
 
   }
 
+
   render() {
     var tabs = ['Map', 'Data', 'Input'];
     var tabComponent = tabs.map(function(tab, i) {
       return (<Tab eventKey={i} title={tab} key={i}></Tab>);
     });
 
-    var test = () => {console.log("Yooo")}
-
     return (
       <div className = 'nav-container'>
-          <p>Public Health Tool</p>
+          <h1>One Step Public Health UI</h1>
           <div className = 'nav-boottabs'>
             <Tabs defaultActiveKey={this.props.selected} animation={false} onSelect={this.handleSubmit} id='nav-tab-id'>
               {tabComponent}
             </Tabs>
         </div>
+        <GoogleLoginComponent/>
       </div>
     )
   }
 }
 
-Nav.propTypes = {
+NavHealth.propTypes = {
   selected: PropTypes.number.isRequired,
 };
 
-module.exports = Nav;
+module.exports = NavHealth;

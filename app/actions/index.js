@@ -1,6 +1,6 @@
 export const login = (user) => ({
   type: 'LOGIN',
-  user: user.user
+  isOneStep: user.isOneStep,
   firstName: user.firstName,
   lastName: user.lastName,
 })

@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Hind|Oswald');
+
 body {
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+  background-color: rgba(250, 250, 250, 1);
+  overflow-y:scroll;
 }
 
 .health-google-maps {
-  position: absolute;
   width: 100%;
   height: 100%;
 }
@@ -22,9 +25,6 @@ body {
   margin-bottom: 0;
 }
 
-.input-container .react-grid-Container {
-  margin-bottom: 30px;
-}
 
 .home-widget-container {
   margin: auto;
@@ -88,6 +88,10 @@ body {
 .data-container .filter-row .navbar {
     margin-bottom: 0px;
     background-color: #337ab7;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-color: #22527b;
 }
 
 /* change mobile nav bar text color */
@@ -176,6 +180,20 @@ body {
   margin-bottom: 0px;
 }
 
+/* panel header */
+.data-content-container .data-header a{
+  text-decoration: none;
+  text-decoration-line: none;
+}
+/* panel header hover*/
+.data-content-container .data-header:hover a{
+  text-decoration: underline;
+  cursor: pointer;
+  cursor: hand;
+}
+
+
+
 .data-content-container{
   margin-right: 10px;
   margin-left: 10px;
@@ -197,15 +215,25 @@ body {
   border-radius: 5px;
   border-width: 2px;
   border-color: lightblue;
-  background-color: #337Ab7;
+  background-color: #337AB7;
 }
 
 .list-group-item.home-category-list-item:hover {
   background-color: darkblue;
 }
 
-.list-group-item.home-category-list-item:focus {
-  background-color: darkblue;
+.list-group-item.home-category-list-item:focus:not(:hover) {
+  outline: none;
+  background-color: #337AB7;
+}
+
+.list-group-item.home-tag-list-item {
+  font-weight: normal;
+}
+
+.list-group-item.home-tag-list-item:focus {
+  outline: none;
+  font-weight: bold;
 }
 
 .home-row {
@@ -244,12 +272,75 @@ body {
   margin-left: auto;
 }
 
+.input-container .btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.input-container .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+/* upload csv button */
+.input-container .upload-csv-button {
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* upload csv button */
+.input-container .delet-row-btn {
+  position: absolute;
+  right: 0;
+}
+
+/* input bottom buttons */
+.input-container .input-page-buttons{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* input save button */
+.input-container .reset-data-btn{
+  margin-right: 5px;
+}
+
+.google-login-button .google-top p {
+  font-size: 14px;
+  color: white;
+  margin-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.google-login-button .google-top {
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 .nav-container {
   width: 100%;
   border: none;
-  border-bottom: solid;
-  height: 10vh;
+  /*border-bottom: solid; */
+  height: 100px;
+  background-color: #337ab7;
   display: flex;
+  position: relative;
 }
 
 
@@ -264,18 +355,80 @@ body {
     text-decoration: none; /* Add this */
 }
 
-.nav-container p {
-  font-size: 3vw;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-left: 10px;
-}
+
 
 .nav-container h1 {
   color: white;
-  right: 0;
   margin-left: 10px;
   margin-right: auto;
+  font-size: 40px;
+  font-family: 'Oswald', sans-serif;
+  position: absolute;
+  bottom: 0px;
+}
+
+.bottom-container {
+  background-color: #337ab7;
+  color: white;
+  display: flex;
+  height: 120px;
+}
+
+.bottom-container .right-bottom{
+  position: absolute;
+  right: 10px;
+  margin-top: 10px;
+}
+
+.bottom-container .left-bottom{
+  position: absolute;
+  left: 10px;
+  margin-top: 10px;
+}
+
+.bottom-container img{
+  height: 70px;
+}
+
+.data-page-container {
+  margin-bottom: 10px;
+}
+
+.data-page-container .data-header .label {
+  font-size: 20px;
+}
+
+.data-page-container .updated-date {
+  margin-bottom: 5px;
+}
+
+.nav-container .nav-tabs {
+  border: none;
+}
+
+.nav-container .nav-tabs>li.active>a, .nav-container .nav-tabs>li.active>a:hover {
+  background-color: #fafafa;
+  color: #0f0f0f;
+}
+
+.nav-container .nav-tabs li a{
+  background-color: rgba(250, 250, 250, 0.9);
+  color: #1f78c3;
+}
+
+.nav-container .nav-tabs li a:hover{
+  border-bottom: none;
+  color: #4c4c4c;
+}
+
+.google-login-button .google-login-btn {
+  padding: 0px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.loading-container .long-space {
+  height: 100vh;
 }
 
 .Tab {

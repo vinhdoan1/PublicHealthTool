@@ -1,23 +1,32 @@
-const google = (state = [], action) => {
+var stateStart = {
+  loggedIn: false,
+  isOneStep: false,
+  firstName: "",
+  lastName: "",
+}
+
+const google = (state = stateStart, action) => {
   switch (action.type) {
-    case 'LOGIN':
-      return
-        [{
+    case 'LOGIN': {
+      return {
           loggedIn: true,
-          user: action.user,
+          isOneStep: action.isOneStep,
           firstName: action.firstName,
           lastName: action.lastName,
-        }]
-    case 'LOGOUT':
-    return
-      [{
-        loggedIn: false,
-        user: false,
-        firstName: "",
-        lastName: "",
-      }]
+        }
+    }
+    case 'LOGOUT': {
+      return {
+          loggedIn: false,
+          isOneStep: false,
+          firstName: "",
+          lastName: "",
+        }
+    }
     default:
+    {
       return state
+    }
   }
 }
 

@@ -22,7 +22,7 @@ var Nav = require('react-bootstrap').Nav;
 var NavItem = require('react-bootstrap').NavItem;
 var NavDropdown = require('react-bootstrap').NavDropdown;
 var MenuItem = require('react-bootstrap').MenuItem;
-
+var Loading = require('./Loading');
 
 
 import ShowMore from 'react-show-more';
@@ -43,6 +43,7 @@ class Data extends React.Component {
       sorts: ["Most Recent", "Alphabetical","Most Viewed"],
       results: [10, 25, 50],
       tagsModal: false,
+      loading: true,
     };
 
     this.handleSearch = this.handleSearch.bind(this);
@@ -257,9 +258,9 @@ class Data extends React.Component {
       break;
       case 0: // date
       return (function (a,b) {
-        if (a.date < b.date)
-        return -1;
         if (a.date > b.date)
+        return -1;
+        if (a.date < b.date)
         return 1;
         return 0;
       });
@@ -284,7 +285,8 @@ class Data extends React.Component {
         this.setState(function () {
           return {
             categories: categories,
-            data:data
+            data:data,
+            loading: false
           }
         });
     }.bind(this));
@@ -301,6 +303,19 @@ class Data extends React.Component {
     }
 
     render() {
+      let loading = this.state.loading;
+      if (loading)
+      {
+        return(<div className = 'data-container'>
+          <NavHealth
+            selected = {1}
+            history={this.props.history}
+          />
+          <Loading/>
+        </div>);
+      }
+
+
       let activePage; // what page pagination is on
       let resultsPerPage; // how many results per page
       let numPages; // total pages for pagination
@@ -340,7 +355,7 @@ class Data extends React.Component {
       if ('sort' in querystring)
         sortType = querystring.sort;
       else
-        sortType = -1;
+        sortType = 0;
 
       var search = this.state.search.toLowerCase();
 
@@ -400,13 +415,19 @@ class Data extends React.Component {
         tagsString = tagsString.substring(0, tagsString.length - 2);
         */
 
-        let header = (<div><a href={"/data/display/" + data.type + "/" + encodeURIComponent(data.affliction)}>{data.name}</a> <Label>{data.type}</Label></div> );
 
         var date = new Date(0); // The 0 there is the key, which sets the date to the epoch
         date.setUTCMilliseconds(data.date);
+        var nextPage = () => {
+          this.props.history.push({
+            pathname: "/data/display/" + data.type + "/" + encodeURIComponent(data.affliction),
+          });
+        }
+
+        let header = (<div className="data-header"><a onClick={nextPage}>{data.name}</a> <Label>{data.type}</Label></div> );
 
         return (<Panel header={header} bsStyle="primary" key={data.name}>
-        <p className="updated-date"><b>Updated: </b>{date.toDateString()}&nbsp;&nbsp;&nbsp;<b>Views:</b> {data.views}</p>
+        <p className="updated-date"><b>Source: </b> {data.source} &nbsp;&nbsp;&nbsp;<b>Updated: </b>{date.toDateString()}&nbsp;&nbsp;&nbsp;<b>Views:</b> {data.views}</p>
         <hr></hr>
         <ShowMore
           lines={3}
@@ -420,7 +441,7 @@ class Data extends React.Component {
         <p>{tagsString}</p>
         */}
       </Panel>);
-    });
+    }.bind(this));
 
     let displayNumOptions = this.state.results.map(function(num) {
       return (<option value={num} key={num}>{"Display " + num + " Results Per Page"}</option>);

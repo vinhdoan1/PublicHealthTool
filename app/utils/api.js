@@ -5,11 +5,12 @@ function convertMapData(data)
 {
   var mapDatas = []
   var dataRows = JSON.parse(data.Data.rows)
+  var valKey = (data.Data.cols.indexOf("Value"));
   for (var i = 0; i < dataRows.length; i++)
   {
     var dataRow = dataRows[i]
 
-    var valKey = (Object.keys(dataRow).length - 3);
+
     var mapData = {
       districtName: dataRow[0],
       location: [dataRow.Latitude, dataRow.Longitude],
@@ -21,7 +22,7 @@ function convertMapData(data)
 }
 
 // for getDataFromAffliction  turn cols from server to usable grid
-function convertColsForGrid(cols)
+function convertColsForGrid(cols, editable)
 {
   var gridCols = []
   for (var i = 0; i < cols.length; i++)
@@ -32,7 +33,7 @@ function convertColsForGrid(cols)
     var gridCol = {
       key: key,
       name: cols[i],
-      editable: false,
+      editable: editable,
       resizable: true,
     }
     gridCols.push(gridCol)
@@ -54,13 +55,13 @@ function getAllData() {
     });
 }
 
-function getDataFromAffliction(type, affliction) {
+function getDataFromAffliction(type, affliction, editable) {
   return axios.get('https://eng100d-project.herokuapp.com/list/' + type + '/' + affliction)
     .then(function (user) {
       var data = user.data
       var cols = data.Data.cols;
       var rows = JSON.parse(data.Data.rows);
-      var gridCols = convertColsForGrid(cols);
+      var gridCols = convertColsForGrid(cols, editable);
     //  var gridRows = this.convertRowsForGrid(rows);
       return {
           name: data.info.name,
@@ -69,23 +70,37 @@ function getDataFromAffliction(type, affliction) {
           description: data.info.description,
           date: data.info.date,
           columns: gridCols,
-          rows: rows
+          rows: rows,
+          source: data.info.source
       }
     });
 }
 
 function getMapDataFromAffliction(type, affliction) {
-  return axios.get('https://eng100d-project.herokuapp.com/list/' + type + '/' + affliction)
+  var url = 'https://eng100d-project.herokuapp.com/list/' + type + '/' + encodeURIComponent(affliction);
+  console.log(url);
+  return axios.get(url)
     .then(function (user) {
       return convertMapData(user.data);
     });
 }
 
+<<<<<<< HEAD
+function setInfo(type, affliction, data) {
+  return axios.post('https://eng100d-project.herokuapp.com/edit/info/' + type + '/' + affliction, data)
+  .catch(function (error) {
+    console.log(error);
+  });
+}
 
 
+
+=======
+>>>>>>> af03e7576dff1995bfcfb6c0fa8dea68ea9ac58e
 module.exports = {
   getCategories: getCategories,
   getAllData: getAllData,
   getDataFromAffliction: getDataFromAffliction,
   getMapDataFromAffliction: getMapDataFromAffliction,
+  setInfo: setInfo,
 };
