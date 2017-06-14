@@ -7,13 +7,16 @@ var Glyphicon = require('react-bootstrap').Glyphicon;
 var FormControl = require('react-bootstrap').FormControl;
 var ListGroup = require('react-bootstrap').ListGroup;
 var ListGroupItem = require('react-bootstrap').ListGroupItem;
+var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+var Tooltip = require('react-bootstrap').Tooltip;
+
 var MapsApiKey = require('../../config').googlemapsapikey;
 var api = require('../utils/api.js');
 
 import GoogleMapReact from 'google-map-react';
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
+const radiusSize = 20;
 
 class SimpleMap extends React.Component {
 
@@ -28,9 +31,11 @@ class SimpleMap extends React.Component {
       data: [],
       categories: [],
       tags: [],
+      points: [],
     };
 
     this.handleSearch = this.handleSearch.bind(this);
+    this.createMapOptions = this.createMapOptions.bind(this);
   }
 
   //take datas array and create array of categories
@@ -81,7 +86,9 @@ class SimpleMap extends React.Component {
       data: points.map(point => (
         {location: new this.state.mapsApi.LatLng(point['location'][0], point['location'][1]),
         weight: point['weight']})),
-      map: this.map
+      map: this.map,
+      opacity: .8,
+      radius: radiusSize,
     });
   }
 
@@ -114,6 +121,7 @@ class SimpleMap extends React.Component {
 
           this.setState(function() {
             return {
+              points: mapPoints,
               map: map,
               heatmap: heatmap
             }
@@ -160,6 +168,24 @@ class SimpleMap extends React.Component {
     return pList;
   }
 
+  createMapOptions(maps) {
+  // next props are exposed at maps
+  // "Animation", "ControlPosition", "MapTypeControlStyle", "MapTypeId",
+  // "NavigationControlStyle", "ScaleControlStyle", "StrokePosition", "SymbolPath", "ZoomControlStyle",
+  // "DirectionsStatus", "DirectionsTravelMode", "DirectionsUnitSystem", "DistanceMatrixStatus",
+  // "DistanceMatrixElementStatus", "ElevationStatus", "GeocoderLocationType", "GeocoderStatus", "KmlLayerStatus",
+  // "MaxZoomStatus", "StreetViewStatus", "TransitMode", "TransitRoutePreference", "TravelMode", "UnitSystem"
+  return {
+    mapTypeControlOptions: {
+      /*
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+      mapTypeIds: ['roadmap', 'terrain'] */
+    },
+    mapTypeControl: true,
+    fullscreenControl: true
+  };
+}
+
   render() {
     var points = [];
 
@@ -167,29 +193,29 @@ class SimpleMap extends React.Component {
 
     //generate tags list (right side)
     let itemsToDisplay = this.state.categories.map(function(categ) {
-    var renderList = [];
-    var filteredData = [];
+      var renderList = [];
+      var filteredData = [];
 
-    filteredData = this.state.data.filter(function(data){
-      return data.type == categ.name;
-    })
-    .filter(function(data){
-      //check whether search term in name, description,tags
-      return (data.name.toLowerCase().indexOf(search) >= 0) ||
-      (data.type.toLowerCase().indexOf(search) >= 0) ||
-      (data.description.toLowerCase().indexOf(search) >= 0);
-    });
+      filteredData = this.state.data.filter(function(data){
+        return data.type == categ.name;
+      })
+      .filter(function(data){
+        //check whether search term in name, description,tags
+        return (data.name.toLowerCase().indexOf(search) >= 0) ||
+        (data.type.toLowerCase().indexOf(search) >= 0) ||
+        (data.description.toLowerCase().indexOf(search) >= 0);
+      });
 
-    renderList.push(<ListGroupItem className="home-category-list-item" key={categ.name} onClick={() => {this.handleCategoriesClick(categ.name);}}><font color="#EEEEEE">{categ.name + " (" + filteredData.length + ")"}</font></ListGroupItem>);
+      renderList.push(<ListGroupItem className="home-category-list-item" key={categ.name} onClick={() => {this.handleCategoriesClick(categ.name);}}><font color="#EEEEEE">{categ.name + " (" + filteredData.length + ")"}</font></ListGroupItem>);
 
-    if(categ.isVisible)
-    {
-      for(var i = 0; i < filteredData.length; i++)
+      if(categ.isVisible)
       {
-        let dataPoint = filteredData[i];
-        renderList.push((<ListGroupItem className="home-tag-list-item" onClick={() => {this.handleAfflictionClick(dataPoint.type, dataPoint.affliction);}}>{dataPoint.name}</ListGroupItem>));
+        for(var i = 0; i < filteredData.length; i++)
+        {
+          let dataPoint = filteredData[i];
+          renderList.push((<ListGroupItem className="home-tag-list-item" onClick={() => {this.handleAfflictionClick(dataPoint.type, dataPoint.affliction);}}>{dataPoint.name}</ListGroupItem>));
+        }
       }
-    }
 
       return renderList;
 
@@ -205,9 +231,64 @@ class SimpleMap extends React.Component {
     console.log("map val = " + this.state.map);
     console.log("heatmap val = " + this.state.heatmap);
 
+    // popups when you hover over heatmap points
+    let popups = this.state.points.map( function(point){
+      var divSize = radiusSize * 1.6;
+      return (<div
+      lat={point.location[0]}
+      lng={point.location[1]}>
+        <OverlayTrigger trigger={['hover', 'focus', 'click']} rootClose placement="bottom" overlay={(<Tooltip id="tooltip">{"District: " + point.districtName} <br/> {"Weight: " + point.weight}</Tooltip>)}>
+            <div style={{
+                width: divSize + 'px',
+                height: divSize + 'px',
+                position: 'absolute',
+                top: divSize / -2 + 'px',
+                right: divSize / -2 + 'px'}}></div>
+        </OverlayTrigger>
+      </div>);
+    }.bind(this));
+
     return (
       <div className="home-google-maps">
         <Row className="home-row">
+          <Col className="home-map-col" xs={9} md={9}>
+          <GoogleMapReact
+            bootstrapURLKeys={{
+              key: MapsApiKey,
+              libraries: 'visualization',
+            }}
+            defaultCenter={this.state.mapCenter}
+            defaultZoom={7}
+            options={{mapTypeControl: true, fullscreenControl: true}}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({map, maps}) => {
+              let heatmap = new maps.visualization.HeatmapLayer({
+                data: points.map(point => (
+                  {location: new maps.LatLng(point['location'][0], point['location'][1]),
+                  weight: point['weight']})),
+
+              });
+
+                // heatmap.set('opacity', 1);
+            ///  heatmap.set('gradient', gradient);
+            //  heatmap.setMap(map);
+
+              console.log("init map states");
+              this.state.map = map;
+              this.state.heatmap = heatmap;
+              this.state.mapsApi = maps;
+            }}
+          >
+          {popups}
+          <div
+          lat={28.29406}
+          lng={84.034008}>
+            <OverlayTrigger trigger={['hover', 'focus', 'click']} rootClose placement="bottom" overlay={(<Tooltip id="tooltip">{"District: Blah"} <br/> {"Value: 10"}</Tooltip>)}>
+                <div style={{width: '10px', height: '10px'}}></div>
+            </OverlayTrigger>
+          </div>
+          </GoogleMapReact>
+          </Col>
           <Col className="home-search-col" xs={3} md={3}>
              <InputGroup>
                <InputGroup.Addon><Glyphicon glyph="search" /></InputGroup.Addon>
@@ -220,31 +301,6 @@ class SimpleMap extends React.Component {
                <ListGroup className="home-categories-list" >
                  { displayList }
                </ListGroup>
-          </Col>
-          <Col className="home-map-col" xs={9} md={9}>
-          <GoogleMapReact
-            bootstrapURLKeys={{
-              key: MapsApiKey,
-              libraries: 'visualization',
-            }}
-            defaultCenter={this.state.mapCenter}
-            defaultZoom={7}
-            yesIWantToUseGoogleMapApiInternals
-            onGoogleApiLoaded={({map, maps}) => {
-              const heatmap = new maps.visualization.HeatmapLayer({
-                data: points.map(point => (
-                  {location: new maps.LatLng(point['location'][0], point['location'][1]),
-                  weight: point['weight']}))
-              });
-              heatmap.setMap(map);
-
-              console.log("init map states");
-              this.state.map = map;
-              this.state.heatmap = heatmap;
-              this.state.mapsApi = maps;
-            }}
-          >
-          </GoogleMapReact>
           </Col>
         </Row>
       </div>

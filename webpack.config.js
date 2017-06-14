@@ -14,7 +14,8 @@ var config = {
     rules: [
       { test: /\.(js)$/, use: 'babel-loader' },
       { test: /\.css$/, use: [ 'style-loader', 'css-loader' ]},
-      { test: /\.(png|jpg)$/, use: ['url-loader']}
+      { test: /\.(png|jpg)$/, use: ['url-loader']},
+      { test: /\.(svg)$/, use: ['svg-url-loader']}
     ],
     loaders: [
       {

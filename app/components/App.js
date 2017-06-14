@@ -8,6 +8,8 @@ var Home = require('./Home');
 var Input = require('./Input');
 var DataPage = require('./DataPage');
 var BottomBar = require('./BottomBar');
+var ErrorPage = require('./ErrorPage');
+
 
 
 
@@ -21,9 +23,7 @@ class App extends React.Component {
             <Route exact path='/data' component={Data} />
             <Route path ='/data/display' component={DataPage} />
             <Route path='/input' component={Input} />
-            <Route render={function () {
-              return <p>Not Found</p>
-            }} />
+            <Route component={ErrorPage} />
           </Switch>
           <BottomBar/>
         </div>

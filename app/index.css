@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Hind|Oswald');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
 
 body {
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
@@ -92,6 +92,14 @@ body {
     border-right: none;
     border-bottom: none;
     border-color: #22527b;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+/* change mobile nav bar */
+.data-container .filter-row .navbar .navbar-header{
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 /* change mobile nav bar text color */
@@ -202,34 +210,39 @@ body {
   margin-bottom: 10px;
 }
 
-.home-categories-list {
+
+.home-container .home-categories-list {
   margin-top: 10px;
   color: white;
 }
 
-.home-category-list-item {
+
+.home-container  .home-category-list-item {
+  /*
   font-weight: bold;
   font-size: 18px;
   border-radius: 5px;
   border-width: 2px;
+  border-color: lightblue; */
+  color: white;
   border-color: lightblue;
   background-color: #337AB7;
 }
 
-.list-group-item.home-category-list-item:hover {
+.home-container .list-group-item.home-category-list-item:hover {
   background-color: darkblue;
 }
 
-.list-group-item.home-category-list-item:focus:not(:hover) {
+.home-container .list-group-item.home-category-list-item:focus:not(:hover) {
   outline: none;
   background-color: #337AB7;
 }
 
-.list-group-item.home-tag-list-item {
+.home-container .list-group-item.home-tag-list-item {
   font-weight: normal;
 }
 
-.list-group-item.home-tag-list-item:focus {
+.home-container .list-group-item.home-tag-list-item:focus {
   outline: none;
   font-weight: bold;
 }
@@ -246,10 +259,15 @@ body {
   border-width: 4px;
   border-color: #999999;
   height: 650px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 .home-search-col {
-  margin-left: 10px;
+  margin-top: 10px;
 }
 
 .input-container hr {
@@ -261,6 +279,7 @@ body {
   margin-right: 10;
   margin-left: auto;
 }
+
 .input-container .single-col .btn{
   margin-right: 10px;
 }
@@ -425,6 +444,10 @@ body {
   padding: 0px;
     border: none;
     background-color: rgba(0, 0, 0, 0);
+}
+
+.label-default {
+  background-color: #444;
 }
 
 .long-space {

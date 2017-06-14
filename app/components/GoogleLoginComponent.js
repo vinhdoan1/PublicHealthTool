@@ -3,8 +3,10 @@ import GoogleLogin from 'react-google-login';
 import { connect } from "react-redux";
 import { login } from "../actions/";
 import { logout } from "../actions/";
+import ReactSVG from 'react-svg'
 var Button = require('react-bootstrap').Button;
 var Glyphicon = require('react-bootstrap').Glyphicon;
+
 
 const otherEmails = ["vinhdoan1@gmail.com"]
 
