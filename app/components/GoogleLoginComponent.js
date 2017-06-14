@@ -8,7 +8,7 @@ var Button = require('react-bootstrap').Button;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 
 
-const otherEmails = ["vinhdoan1@gmail.com"]
+const otherEmails = []
 
 @connect((store) => {
   //console.log(store)

@@ -45,6 +45,7 @@
     "react-google-login": "^2.8.9",
     "react-redux": "^5.0.5",
     "react-show-more": "^1.1.1",
+    "react-sticky-el": "^1.0.3",
     "redux": "^3.6.0",
     "riek": "^1.0.7",
     "style-loader": "^0.17.0",

@@ -85,7 +85,7 @@ body {
 }
 
 /* change mobile nav bar */
-.data-container .filter-row .navbar {
+.navbar {
     margin-bottom: 0px;
     background-color: #337ab7;
     border-left: none;
@@ -97,53 +97,72 @@ body {
 }
 
 /* change mobile nav bar */
-.data-container .filter-row .navbar .navbar-header{
+.navbar .navbar-header{
     margin-left: 0px;
     margin-right: 0px;
 }
 
 /* change mobile nav bar text color */
-.data-container .filter-row .navbar .nav{
+.navbar .nav{
    margin-bottom: 0px;
    margin-top: 0px;
 }
 
 /* change mobile nav bar text color */
-.data-container .filter-row .navbar a{
+.navbar .navbar-header a{
    color: white;
 }
 
+
 /* change mobile nav bar text color */
-.data-container .filter-row .navbar-toggle{
+.navbar-toggle{
    background-color: rgba(0, 0, 0, 0.33);
 }
 
 /* change mobile nav bar text color */
-.data-container .filter-row .navbar .dropdown-menu a{
+.navbar .dropdown-menu a{
    color: white;
 }
 
 /* change mobile nav bar */
-.data-container .filter-row .dropdown #basic-nav-dropdown{
+.dropdown #basic-nav-dropdown{
    background-color: rgba(0, 0, 0, 0.33);
 }
 
-/* change mobile nav bar */
-.data-container .filter-row .dropdown .dropdown-menu{
-   background-color: rgba(0, 0, 0, 0.2);
+.navbar-nav .open .dropdown-menu {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 /* change mobile nav bar */
-.data-container .filter-row .dropdown .dropdown-menu li a{
+.dropdown #basic-nav-dropdown{
    color: white;
+   margin-left: 5px;
 }
+
+.navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
+  color: white;
+  margin-left: 8px;
+}
+
+.navbar-inverse .navbar-toggle:hover {
+  background-color: #163652;
+}
+
+.navbar-inverse .navbar-toggle:focus {
+  background-color: #163652;
+}
+
+.navbar-inverse .navbar-nav .open .dropdown-menu>.active>a:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 /* change mobile nav bar hover */
-.data-container .filter-row .dropdown .dropdown-menu li:hover{
+.dropdown .dropdown-menu li:hover{
    background-color: rgba(0, 0, 0, 0.1);
 }
-/* change mobile nav bar active */
-.data-container .filter-row .dropdown .dropdown-menu .active a {
-   background-color: rgba(0, 0, 0, 0.1);
+
+.navbar-inverse .navbar-nav .open .dropdown-menu>.active>a {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* move sort bar to right */
@@ -165,6 +184,10 @@ body {
     font-weight: bold;
     font-size: large;
     color: white;
+}
+
+.data-content-container .data-row {
+  min-height: 650px;
 }
 
 /* data panel top panel padding smaller */
@@ -251,10 +274,15 @@ body {
   font-weight: bold;
 }
 
+.home-container .navbar-inverse .navbar-brand {
+  width: 80%;
+  padding: 8px;
+}
+
 .home-row {
   margin: 0px;
   height: 100%;
-  margin-left: 5px;
+  margin-left: 0px;
 }
 
 .home-map-col {
@@ -311,9 +339,7 @@ body {
 /* upload csv button */
 .input-container .upload-csv-button {
     margin-top: 15px;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+    display: inline-block;
 }
 
 /* upload csv button */

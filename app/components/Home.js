@@ -1,11 +1,15 @@
 var React = require('react');
 var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
-var Nav = require('./Nav');
+var HealthNav = require('./Nav');
+var Navbar = require('react-bootstrap').Navbar;
+var Nav = require('react-bootstrap').Nav;
+var NavDropdown = require('react-bootstrap').NavDropdown;
 var InputGroup = require('react-bootstrap').InputGroup;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var FormControl = require('react-bootstrap').FormControl;
 var ListGroup = require('react-bootstrap').ListGroup;
+var MenuItem = require('react-bootstrap').MenuItem;
 var ListGroupItem = require('react-bootstrap').ListGroupItem;
 var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 var Tooltip = require('react-bootstrap').Tooltip;
@@ -238,18 +242,46 @@ class SimpleMap extends React.Component {
           return (<ListGroupItem key={i} onClick={() => {this.handleAfflictionClick(categ.name, data[0])}}>{data[1]}</ListGroupItem>)
       }.bind(this));
 
+
       return (
           <Panel bsStyle="primary" header={categ.name + " (" + filteredData.length + ")"} eventKey={i} key={i}>
             <ListGroup fill>
               {singleAccord}
               {
                 (filteredData.length > 5) &&
-                <ListGroupItem key={6} bsStyle="info" onClick={()=> this.setState({ categoryModal: true, chosenAfflictions: categAfflictions, chosenCategory: categ.name })}>Show All</ListGroupItem>
+                <ListGroupItem key={6} bsStyle="info" onClick={()=> this.setState({ categoryModal: true, chosenAfflictions: filteredData, chosenCategory: categ.name })}>Show All</ListGroupItem>
               }
             </ListGroup>
           </Panel>
       );
+    }.bind(this));
 
+    //generate categories list for mobile (right side)
+    let mobileNavBars = this.state.categories.map(function(categ, i) {
+      var categAfflictions = this.state.categoriesAfflictionsList[categ.name];
+      var filteredData = categAfflictions.filter(function(data){
+        //check whether search term in name
+        return (data[1].toLowerCase().indexOf(search) >= 0);
+      })
+
+      var filteredDataShort = filteredData.filter(function(data, i) {
+        return i < 5;
+      });
+
+      //for mobile bar
+      let singleNav = filteredDataShort.map(function(data, i) {
+        return (<MenuItem key={i} onClick={() => {this.handleAfflictionClick(categ.name, data[0])}}>{data[1]}</MenuItem>);
+      }.bind(this))
+
+      return (
+          <NavDropdown eventKey={i} key={i} title={categ.name + " (" + filteredData.length + ")"} id="basic-nav-dropdown">
+            {singleNav}
+            {
+              (filteredData.length > 5) &&
+              <MenuItem key={6} onClick={()=> this.setState({ categoryModal: true, chosenAfflictions: filteredData, chosenCategory: categ.name })}><i>Show All</i></MenuItem>
+            }
+          </NavDropdown>
+      );
     }.bind(this));
 
     // popups when you hover over heatmap points
@@ -271,8 +303,32 @@ class SimpleMap extends React.Component {
 
     return (
       <div className="home-google-maps">
+        <Row className="search-mobile-row">
+            <Col lgHidden mdHidden smHidden xs={12}>
+              <Navbar inverse collapseOnSelect>
+                <Navbar.Header>
+                  <Navbar.Brand>
+                    <InputGroup>
+                      <InputGroup.Addon><Glyphicon glyph="search" /></InputGroup.Addon>
+                      <FormControl
+                        type="text"
+                        label="Text"
+                        placeholder="Search"
+                        onChange={this.handleSearch}/>
+                      </InputGroup>
+                  </Navbar.Brand>
+                  <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                  <Nav>
+                    {mobileNavBars}
+                  </Nav>
+                </Navbar.Collapse>
+              </Navbar>
+            </Col>
+          </Row>
         <Row className="home-row">
-          <Col className="home-map-col" xs={9} md={9}>
+          <Col className="home-map-col"  sm={9} xs={12} md={9}>
           <GoogleMapReact
             bootstrapURLKeys={{
               key: MapsApiKey,
@@ -305,7 +361,7 @@ class SimpleMap extends React.Component {
           </div>
           </GoogleMapReact>
           </Col>
-          <Col className="home-search-col" xs={3} md={3}>
+          <Col className="home-search-col" xsHidden sm={3} md={3}>
              <InputGroup>
                <InputGroup.Addon><Glyphicon glyph="search" /></InputGroup.Addon>
                <FormControl
@@ -348,7 +404,7 @@ class Home extends React.Component {
   render() {
     return (
       <div className = 'home-container'>
-        <Nav
+        <HealthNav
           selected = {0}
           history={this.props.history}
         />

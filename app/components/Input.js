@@ -368,6 +368,9 @@ class Input extends React.Component {
            });
        }.bind(this))
       */
+      this.props.history.push({
+        pathname: '/data',
+      });
    }
    var newCols = this.getColsForSending(this.state.columns);
    var newRows = JSON.stringify(this.state.rows);
@@ -513,10 +516,12 @@ class Input extends React.Component {
         <form>
           <Row className="show-grid">
               <Col xs={11} md={11}>
-                <Button className="btn btn-default btn-file upload-csv-button">
-                    Upload from .csv file
-                    <input type="file" onChange={this.readFileAndSetData}/>
-                </Button>
+                <center>
+                  <label className="btn btn-default btn-file upload-csv-button">
+                      Upload from .csv file
+                      <input type="file" onChange={this.readFileAndSetData}/>
+                  </label>
+                </center>
                   <FormGroup controlId="dataNameForm">
                     <ControlLabel>{"Edit Name:"}</ControlLabel>
                     <FormControl type="text"

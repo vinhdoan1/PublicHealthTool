@@ -481,7 +481,7 @@ class Data extends React.Component {
             <Navbar inverse collapseOnSelect>
               <Navbar.Header>
                 <Navbar.Brand>
-                  <a href="#">Filter Results</a>
+                  <a>Filter Results</a>
                 </Navbar.Brand>
                 <Navbar.Toggle />
               </Navbar.Header>

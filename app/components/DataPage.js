@@ -136,10 +136,12 @@ class DataPage extends React.Component {
                 rowsCount={this.state.rows.length}
                 minHeight={500} />
               <p className="updated-date"><b>Source: </b> {this.state.source} &nbsp;&nbsp;&nbsp;<b>Last Updated: </b>{date.toDateString()}&nbsp;&nbsp;&nbsp;<b>Views:</b> {this.state.views}</p>
-
               {
                 this.props.onestep &&
-                <center><Button bsStyle="primary" onClick={toDataEdit}>Edit Data</Button></center>
+                <div>
+                  <p><b>Last Updated By: </b>Vinh Doan</p>
+                  <center><Button bsStyle="primary" onClick={toDataEdit}>Edit Data</Button></center>
+                </div>
               }
           </Col>
         </Row>
