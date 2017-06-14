@@ -359,7 +359,7 @@ class SimpleMap extends React.Component {
     }.bind(this));
 
     return (
-      <div className="health-google-maps">
+      <div className="home-google-maps">
         <Row className="home-row">
           <Col className="home-map-col" xs={9} md={9}>
           <GoogleMapReact
@@ -396,7 +396,6 @@ class SimpleMap extends React.Component {
                 <div style={{width: '10px', height: '10px'}}></div>
             </OverlayTrigger>
           </div>
-
           </GoogleMapReact>
           </Col>
           <Col className="home-search-col" xs={3} md={3}>
