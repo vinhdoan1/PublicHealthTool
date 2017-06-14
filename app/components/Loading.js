@@ -41,6 +41,7 @@ class Loading extends React.Component {
     var height = isNaN(window.innerHeight) ? window.clientHeight : window.innerHeight;
     return (
       <div className="loading-container">
+      <br/>
       <p style={styles.content}>
         {this.state.text}
       </p>

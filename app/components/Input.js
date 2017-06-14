@@ -17,7 +17,7 @@ var Glyphicon = require('react-bootstrap').Glyphicon;
 var Modal = require('react-bootstrap').Modal;
 import { connect } from "react-redux";
 var api = require('../utils/api');
-
+var Confirm = require('react-confirm-bootstrap');
 
 
 import IHUpdate from 'immutability-helper';
@@ -74,6 +74,7 @@ class Input extends React.Component {
     this.readFileAndSetData = this.readFileAndSetData.bind(this);
     this.resetFields = this.resetFields.bind(this);
     this.handleGridSort = this.handleGridSort.bind(this);
+    this.deleteData = this.deleteData.bind(this);
   }
 
   componentDidMount() {
@@ -112,8 +113,8 @@ class Input extends React.Component {
                   prevType,
                   affliction,
                   fromDataPage: true,
-                  saveButtonText: "Save",
-                  categories
+                  saveButtonText: "Save Data",
+                  categories,
                 }
               });
           }.bind(this))
@@ -328,6 +329,7 @@ class Input extends React.Component {
 
  saveInfo()
  {
+   this.setState({isSaving: true, saveButtonText: "Saving Data"});
    var type = this.state.category;
    var affliction = this.state.affliction;
    var d=new Date();
@@ -339,14 +341,52 @@ class Input extends React.Component {
      date: newDate,
      source: this.state.source
    }
-   api.setInfo(type,affliction,newInfo)
-   .then (
-     console.log("DONEZO")
-   )
+
+   if (this.state.category !== this.state.prevType)
+   {
+     // restructure data
+   }
+
+   if (this.state.fromDataPage)
+   {
+     api.setInfo(type,affliction,newInfo)
+     .then (
+       function (data) {
+       this.setState({
+         isSaving: false,
+         saveButtonText: "Save Data",
+       })
+     }.bind(this))
+   }
+   else {
+     /*
+      api.addDataSet(type, affliction, newInfo)
+       .then (
+         function (data) {
+           this.props.history.push({
+             pathname: '/data',
+           });
+       }.bind(this))
+      */
+   }
    var newCols = this.getColsForSending(this.state.columns);
    var newRows = JSON.stringify(this.state.rows);
-   console.log(newCols, newRows);
- }
+  // console.log(newCols, newRows);
+  }
+
+  deleteData()
+  {/*
+    api.deleteData(type,affliction)
+    .then (
+      function (data) {
+        this.props.history.push({
+          pathname: '/data',
+        });
+    }.bind(this))*/
+    this.props.history.push({
+      pathname: '/data',
+    });
+  }
 
  readFileAndSetData(filename)
  {
@@ -560,11 +600,22 @@ class Input extends React.Component {
             <Col xs={11} md={11}>
               <center>
               { this.state.fromDataPage &&
-                <Button className="reset-data-btn" bsStyle="default" onClick={this.resetFields}>
-                  Reset Changes
-                </Button>
+                <div style={{display: 'inline'}}>
+                  <Confirm
+                    onConfirm={this.deleteData}
+                    body="Are you sure you want to delete this data set?"
+                    confirmText="Delete"
+                    title="Deleting Stuff">
+                  <Button className="reset-data-btn" bsStyle="danger">
+                    Delete Dataset
+                  </Button>
+                </Confirm>
+                  <Button className="reset-data-btn" bsStyle="default" onClick={this.resetFields}>
+                    Reset Changes
+                  </Button>
+                </div>
               }
-              <Button bsStyle="primary" onClick={this.saveInfo}>
+              <Button bsStyle="primary" onClick={this.saveInfo} disabled={this.state.isSaving}>
                 {this.state.saveButtonText}
               </Button>
             </center>
