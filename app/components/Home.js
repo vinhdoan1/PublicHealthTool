@@ -206,7 +206,7 @@ class SimpleMap extends React.Component {
     console.log("heatmap val = " + this.state.heatmap);
 
     return (
-      <div className="health-google-maps">
+      <div className="home-google-maps">
         <Row className="home-row">
           <Col className="home-search-col" xs={3} md={3}>
              <InputGroup>
@@ -244,11 +244,6 @@ class SimpleMap extends React.Component {
               this.state.mapsApi = maps;
             }}
           >
-          <AnyReactComponent
-            lat={59.955413}
-            lng={30.337844}
-            text={'Kreyser Avrora'}
-          />
           </GoogleMapReact>
           </Col>
         </Row>
