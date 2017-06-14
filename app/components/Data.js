@@ -24,6 +24,7 @@ var NavDropdown = require('react-bootstrap').NavDropdown;
 var MenuItem = require('react-bootstrap').MenuItem;
 var Loading = require('./Loading');
 
+import Sticky from 'react-sticky-el';
 
 import ShowMore from 'react-show-more';
 var queryString = require('query-string');
@@ -519,12 +520,14 @@ class Data extends React.Component {
 
           {/* Categories */}
           <Row className="data-row">
-            <Col xsHidden md={3} className="data-tabs">
-              <Panel collapsible defaultExpanded header="Categories">
-                <ListGroup fill>
-                  {categoriesListGroupItems}
-                </ListGroup>
-              </Panel>
+            <Col xsHidden sm={3} md={3} className="data-tabs">
+              <Sticky>
+                <Panel collapsible defaultExpanded header="Categories">
+                  <ListGroup fill>
+                    {categoriesListGroupItems}
+                  </ListGroup>
+                </Panel>
+              </Sticky>
               {/* UNUSED TAGS FUNCTINALITY
                 <h2>Tags</h2>
                 <ListGroup>
@@ -547,7 +550,7 @@ class Data extends React.Component {
                 </Modal>
                 */}
               </Col>
-              <Col xs={12} md={9} className="data-row-right">
+              <Col xs={12} sm={9} md={9} className="data-row-right">
                 <Row className="results-row">
                   <Col xsHidden md={5} className="results-col">
                     <p> Result(s): {numResults}&nbsp;</p>
