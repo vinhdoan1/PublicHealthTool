@@ -231,6 +231,10 @@ body {
   background-color: #337AB7;
 }
 
+.home-container .home-categories-accord {
+  margin-top: 5px;
+}
+
 .home-container .list-group-item.home-category-list-item:hover {
   background-color: darkblue;
 }

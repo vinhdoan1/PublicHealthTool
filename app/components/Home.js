@@ -9,6 +9,9 @@ var ListGroup = require('react-bootstrap').ListGroup;
 var ListGroupItem = require('react-bootstrap').ListGroupItem;
 var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 var Tooltip = require('react-bootstrap').Tooltip;
+var Accordion = require('react-bootstrap').Accordion;
+var Modal = require('react-bootstrap').Modal;
+var Panel = require('react-bootstrap').Panel;
 
 var MapsApiKey = require('../../config').googlemapsapikey;
 var api = require('../utils/api.js');
@@ -32,6 +35,10 @@ class SimpleMap extends React.Component {
       categories: [],
       tags: [],
       points: [],
+      categoriesAfflictionsList: {},
+      chosenAfflictions: [],
+      chosenCategory: "",
+      categoryModal: false,
     };
 
     this.handleSearch = this.handleSearch.bind(this);
@@ -64,17 +71,57 @@ class SimpleMap extends React.Component {
     return categs;
   }
 
+  //take datas array and create array of categories
+  extractcategoriesAfflictionsList(datas, categories)
+  {
+    let result = [];
+    let categsObj = {};
+    let categs = [];
+    let categAfflictions = {}; // category are key, affliction list is value
+    for (var i = 0; i < datas.length; i++) {
+      var categ = datas[i].type;
+      if (categ in categsObj)
+      {
+        categsObj[categ]++;
+        categAfflictions[categ].push([datas[i].affliction, datas[i].name])
+      }
+      else
+      {
+        categsObj[categ] = 1;
+        categAfflictions[categ]= [[datas[i].affliction, datas[i].name]]
+      }
+
+    }
+
+    for (var key in categsObj) {
+      categs.push({
+        name: key,
+        count: categsObj[key],
+        isVisible: false,
+      })
+    }
+    categs = categs.sort(function (a,b){
+      return b.count - a.count;
+    })
+    result[0] = categs;
+    result[1] = categAfflictions;
+    return result;
+  }
+
   // when component is created
   componentDidMount(){
     //fetch data
     api.getAllData()
     .then(
       function (data) {
-        var categories = this.extractCategories(data)
+        var res = this.extractcategoriesAfflictionsList(data)
+        var categories = res[0];
+        var categoriesAfflictionsList = res[1];
         this.setState(function () {
           return {
             categories: categories,
-            data:data
+            data:data,
+            categoriesAfflictionsList
           }
         });
       }.bind(this));
@@ -106,6 +153,29 @@ class SimpleMap extends React.Component {
       }
     });
   }
+
+  // onClick for affliction
+  /*
+  handleAfflictionClick(type, affliction)
+  {
+    api.getMapDataFromAffliction(type, affliction)
+      .then(
+        function (mapPoints) {
+          var map = this.state.map;
+          this.state.heatmap.setMap(null);  // delete old heatmap layer
+          var heatmap = this.initHeatMap(mapPoints);
+          heatmap.setMap(map);
+          this.state.heatmap = heatmap;
+
+          this.setState(function() {
+            return {
+              points: mapPoints,
+              map: map,
+              heatmap: heatmap
+            }
+          });
+        }.bind(this));
+  } */
 
   // onClick for affliction
   handleAfflictionClick(type, affliction)
@@ -192,6 +262,7 @@ class SimpleMap extends React.Component {
     var search = this.state.search.toLowerCase();
 
     //generate tags list (right side)
+    /*
     let itemsToDisplay = this.state.categories.map(function(categ) {
       var renderList = [];
       var filteredData = [];
@@ -220,7 +291,45 @@ class SimpleMap extends React.Component {
       return renderList;
 
     }.bind(this));
+    */
 
+    let afflictionsListGroupItems  = this.state.chosenAfflictions.map(function(aff, i){
+      return (<ListGroupItem key={aff.name} onClick={() => {
+        this.handleAfflictionClick(this.state.chosenCategory, aff[0]);
+        this.setState({ categoryModal: false });}}>{aff[1]}</ListGroupItem>);
+    }.bind(this));
+
+    //generate categories list (right side)
+    let panelAccordian = this.state.categories.map(function(categ, i) {
+      var categAfflictions = this.state.categoriesAfflictionsList[categ.name];
+      var filteredData = categAfflictions.filter(function(data){
+        //check whether search term in name
+        return (data[1].toLowerCase().indexOf(search) >= 0);
+      })
+
+      var filteredDataShort = filteredData.filter(function(data, i) {
+        return i < 5;
+      });
+
+      let singleAccord = filteredDataShort.map(function(data,i){
+          return (<ListGroupItem key={i} onClick={() => {this.handleAfflictionClick(categ.name, data[0])}}>{data[1]}</ListGroupItem>)
+      }.bind(this));
+
+      return (
+          <Panel bsStyle="primary" header={categ.name + " (" + filteredData.length + ")"} eventKey={i} key={i}>
+            <ListGroup fill>
+              {singleAccord}
+              {
+                (filteredData.length > 5) &&
+                <ListGroupItem key={6} bsStyle="info" onClick={()=> this.setState({ categoryModal: true, chosenAfflictions: categAfflictions, chosenCategory: categ.name })}>Show All</ListGroupItem>
+              }
+            </ListGroup>
+          </Panel>
+      );
+
+    }.bind(this));
+
+    /*
     // the lists in the format we want for displaying
     let displayList = [];
     for(var i = 0; i < itemsToDisplay.length; i++)
@@ -230,6 +339,7 @@ class SimpleMap extends React.Component {
 
     console.log("map val = " + this.state.map);
     console.log("heatmap val = " + this.state.heatmap);
+    */
 
     // popups when you hover over heatmap points
     let popups = this.state.points.map( function(point){
@@ -273,7 +383,6 @@ class SimpleMap extends React.Component {
             ///  heatmap.set('gradient', gradient);
             //  heatmap.setMap(map);
 
-              console.log("init map states");
               this.state.map = map;
               this.state.heatmap = heatmap;
               this.state.mapsApi = maps;
@@ -299,9 +408,25 @@ class SimpleMap extends React.Component {
                  placeholder="Search"
                  onChange={this.handleSearch}/>
                </InputGroup>
+               {/*
                <ListGroup className="home-categories-list" >
                  { displayList }
                </ListGroup>
+               */}
+               <Accordion className="home-categories-accord">
+               {panelAccordian}
+               </Accordion>
+
+               <Modal show={this.state.categoryModal} onHide={()=> this.setState({ categoryModal: !this.state.categoryModal })}>
+               <Modal.Header closeButton>
+               <Modal.Title>{this.state.chosenCategory}</Modal.Title>
+               </Modal.Header>
+               <Modal.Body>
+               <ListGroup fill>
+               {afflictionsListGroupItems}
+               </ListGroup>
+               </Modal.Body>
+               </Modal>
           </Col>
         </Row>
       </div>
