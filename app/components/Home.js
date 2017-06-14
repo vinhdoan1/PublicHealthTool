@@ -42,7 +42,6 @@ class SimpleMap extends React.Component {
     };
 
     this.handleSearch = this.handleSearch.bind(this);
-    this.createMapOptions = this.createMapOptions.bind(this);
   }
 
   //take datas array and create array of categories
@@ -143,39 +142,12 @@ class SimpleMap extends React.Component {
   handleSearch(e)
   {
     var result = e.target.value;
-    /*var querystring = queryString.parse(this.props.location.hash);
-    querystring.page = undefined;
-    var hashqs = queryString.stringify(querystring)
-    location.hash = '#' + hashqs;*/
     this.setState(function () {
       return {
         search: result,
       }
     });
   }
-
-  // onClick for affliction
-  /*
-  handleAfflictionClick(type, affliction)
-  {
-    api.getMapDataFromAffliction(type, affliction)
-      .then(
-        function (mapPoints) {
-          var map = this.state.map;
-          this.state.heatmap.setMap(null);  // delete old heatmap layer
-          var heatmap = this.initHeatMap(mapPoints);
-          heatmap.setMap(map);
-          this.state.heatmap = heatmap;
-
-          this.setState(function() {
-            return {
-              points: mapPoints,
-              map: map,
-              heatmap: heatmap
-            }
-          });
-        }.bind(this));
-  } */
 
   // onClick for affliction
   handleAfflictionClick(type, affliction)
@@ -238,60 +210,12 @@ class SimpleMap extends React.Component {
     return pList;
   }
 
-  createMapOptions(maps) {
-  // next props are exposed at maps
-  // "Animation", "ControlPosition", "MapTypeControlStyle", "MapTypeId",
-  // "NavigationControlStyle", "ScaleControlStyle", "StrokePosition", "SymbolPath", "ZoomControlStyle",
-  // "DirectionsStatus", "DirectionsTravelMode", "DirectionsUnitSystem", "DistanceMatrixStatus",
-  // "DistanceMatrixElementStatus", "ElevationStatus", "GeocoderLocationType", "GeocoderStatus", "KmlLayerStatus",
-  // "MaxZoomStatus", "StreetViewStatus", "TransitMode", "TransitRoutePreference", "TravelMode", "UnitSystem"
-  return {
-    mapTypeControlOptions: {
-      /*
-      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-      mapTypeIds: ['roadmap', 'terrain'] */
-    },
-    mapTypeControl: true,
-    fullscreenControl: true
-  };
-}
+
 
   render() {
     var points = [];
 
     var search = this.state.search.toLowerCase();
-
-    //generate tags list (right side)
-    /*
-    let itemsToDisplay = this.state.categories.map(function(categ) {
-      var renderList = [];
-      var filteredData = [];
-
-      filteredData = this.state.data.filter(function(data){
-        return data.type == categ.name;
-      })
-      .filter(function(data){
-        //check whether search term in name, description,tags
-        return (data.name.toLowerCase().indexOf(search) >= 0) ||
-        (data.type.toLowerCase().indexOf(search) >= 0) ||
-        (data.description.toLowerCase().indexOf(search) >= 0);
-      });
-
-      renderList.push(<ListGroupItem className="home-category-list-item" key={categ.name} onClick={() => {this.handleCategoriesClick(categ.name);}}><font color="#EEEEEE">{categ.name + " (" + filteredData.length + ")"}</font></ListGroupItem>);
-
-      if(categ.isVisible)
-      {
-        for(var i = 0; i < filteredData.length; i++)
-        {
-          let dataPoint = filteredData[i];
-          renderList.push((<ListGroupItem className="home-tag-list-item" onClick={() => {this.handleAfflictionClick(dataPoint.type, dataPoint.affliction);}}>{dataPoint.name}</ListGroupItem>));
-        }
-      }
-
-      return renderList;
-
-    }.bind(this));
-    */
 
     let afflictionsListGroupItems  = this.state.chosenAfflictions.map(function(aff, i){
       return (<ListGroupItem key={aff.name} onClick={() => {
@@ -328,18 +252,6 @@ class SimpleMap extends React.Component {
       );
 
     }.bind(this));
-
-    /*
-    // the lists in the format we want for displaying
-    let displayList = [];
-    for(var i = 0; i < itemsToDisplay.length; i++)
-    {
-      displayList = displayList.concat(itemsToDisplay[i]);
-    }
-
-    console.log("map val = " + this.state.map);
-    console.log("heatmap val = " + this.state.heatmap);
-    */
 
     // popups when you hover over heatmap points
     let popups = this.state.points.map( function(point){
@@ -379,10 +291,6 @@ class SimpleMap extends React.Component {
 
               });
 
-                // heatmap.set('opacity', 1);
-            ///  heatmap.set('gradient', gradient);
-            //  heatmap.setMap(map);
-
               this.state.map = map;
               this.state.heatmap = heatmap;
               this.state.mapsApi = maps;
@@ -407,11 +315,7 @@ class SimpleMap extends React.Component {
                  placeholder="Search"
                  onChange={this.handleSearch}/>
                </InputGroup>
-               {/*
-               <ListGroup className="home-categories-list" >
-                 { displayList }
-               </ListGroup>
-               */}
+
                <Accordion className="home-categories-accord">
                {panelAccordian}
                </Accordion>
