@@ -3,9 +3,20 @@ var axios = require('axios');
 // for getMapDataFromAffliction return map usable data
 function convertMapData(data)
 {
-  var mapDatas = []
-  var dataRows = JSON.parse(data.Data.rows)
-  var valKey = (data.Data.cols.indexOf("Value"));
+  var mapDatas = [];
+  var dataRows, valKey;
+
+  if(data.Data !== undefined)
+  {
+    dataRows = JSON.parse(data.Data.rows);
+    valKey = data.Data.cols.indexOf("Value");
+  }
+  else
+  {
+    dataRows = JSON.parse(data.rows);
+    valKey = data.cols.indexOf("Value");
+  }
+
   for (var i = 0; i < dataRows.length; i++)
   {
     var dataRow = dataRows[i]
@@ -79,6 +90,9 @@ function getDataFromAffliction(type, affliction, editable) {
 
 function getMapDataFromAffliction(type, affliction) {
   var url = 'https://eng100d-project.herokuapp.com/list/' + type + '/' + encodeURIComponent(affliction);
+
+  console.log(url);
+
   return axios.get(url)
     .then(function (user) {
       return convertMapData(user.data);

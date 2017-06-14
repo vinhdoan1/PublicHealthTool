@@ -12,7 +12,6 @@ var Tooltip = require('react-bootstrap').Tooltip;
 var Accordion = require('react-bootstrap').Accordion;
 var Modal = require('react-bootstrap').Modal;
 var Panel = require('react-bootstrap').Panel;
-
 var MapsApiKey = require('../../config').googlemapsapikey;
 var api = require('../utils/api.js');
 
