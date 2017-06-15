@@ -594,14 +594,14 @@ class Input extends React.Component {
         <form>
           <Row className="show-grid">
               <Col xs={11} md={11}>
-                { !this.state.fromDataPage &&
+                { (!this.state.fromDataPage) &&
                 <center>
                   <label className="btn btn-default btn-file upload-csv-button">
                       Upload from .csv file
                       <input type="file" onChange={this.readFileAndSetData}/>
                   </label>
-                }
                 </center>
+                }
                   <FormGroup controlId="dataNameForm">
                     <ControlLabel>{"Edit Name:"}</ControlLabel>
                     <FormControl type="text"
