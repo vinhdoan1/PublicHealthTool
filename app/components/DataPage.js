@@ -27,6 +27,7 @@ class DataPage extends React.Component {
       description: "",
       category: "",
       source: "",
+      uploader: "",
       date: 0,
       views: 0,
       columns: [],
@@ -69,6 +70,7 @@ class DataPage extends React.Component {
     api.getDataFromAffliction(type, affliction, false)
     .then(
       function (data) {
+        console.log(data)
         var newViews = data.views + 1;
         var newData = {
           ...data,
@@ -139,7 +141,7 @@ class DataPage extends React.Component {
               {
                 this.props.onestep &&
                 <div>
-                  <p><b>Last Updated By: </b>Vinh Doan</p>
+                  <p><b>Last Updated By: </b>{this.state.uploader}</p>
                   <center><Button bsStyle="primary" onClick={toDataEdit}>Edit Data</Button></center>
                 </div>
               }

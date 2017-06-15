@@ -83,15 +83,14 @@ function getDataFromAffliction(type, affliction, editable) {
           date: data.info.date,
           columns: gridCols,
           rows: rows,
-          source: data.info.source
+          source: data.info.source,
+          uploader: data.info.uploader,
       }
     });
 }
 
 function getMapDataFromAffliction(type, affliction) {
   var url = 'https://eng100d-project.herokuapp.com/list/' + type + '/' + encodeURIComponent(affliction);
-
-  console.log(url);
 
   return axios.get(url)
     .then(function (user) {
@@ -106,10 +105,47 @@ function setInfo(type, affliction, data) {
   });
 }
 
+function changeCategory(type, affliction, newType) {
+  var newTypeJSON = {type: newType};
+  return axios.post('https://eng100d-project.herokuapp.com/edit/type/' + type + '/' + affliction, newTypeJSON)
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+function addAffliction(type, name, description) {
+  var toSend = {
+    name: name,
+    description: description,
+  }
+  return axios.post('https://eng100d-project.herokuapp.com/add/affliction/' + type , toSend)
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+function editAffliction(type, affliction, afflictionInfoData) {
+  return axios.post('https://eng100d-project.herokuapp.com/edit/data/' + type + '/' + affliction, afflictionInfoData)
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+function deleteAffliction(type, affliction) {
+  return axios.post('https://eng100d-project.herokuapp.com/delete/' + type + '/' + affliction, {})
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 module.exports = {
   getCategories: getCategories,
   getAllData: getAllData,
   getDataFromAffliction: getDataFromAffliction,
   getMapDataFromAffliction: getMapDataFromAffliction,
   setInfo: setInfo,
+  changeCategory: changeCategory,
+  addAffliction: addAffliction,
+  editAffliction: editAffliction,
+  deleteAffliction: deleteAffliction,
 };

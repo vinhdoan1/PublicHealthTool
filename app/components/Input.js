@@ -27,7 +27,9 @@ import { RIEToggle, RIEInput, RIETextArea, RIENumber, RIETags, RIESelect } from 
 @connect((store) => {
   return {
     onestep: (store.google.loggedIn && store.google.isOneStep),
-    reduxLoaded: true
+    reduxLoaded: true,
+    firstName: store.google.firstName,
+    lastName: store.google.lastName,
   }
 })
 class Input extends React.Component {
@@ -39,6 +41,7 @@ class Input extends React.Component {
       name: "",
       description: "",
       category: "",
+      source: "",
       categories: [], // different categories for choosing
       editOpen: false,
       columns: [],
@@ -120,7 +123,7 @@ class Input extends React.Component {
           }.bind(this))
         }
         else {
-            this.setState({ loading: false, saveButtonText: "Add to Database", categories });
+            this.setState({ category: categories[0], loading: false, saveButtonText: "Add to Database", categories });
         }
       }.bind(this))
     }
@@ -314,6 +317,27 @@ class Input extends React.Component {
    return retCols;
  }
 
+ getRowsForSending(rows, cols)
+ {
+   var retRows = [];
+   for (var i = 0; i < rows.length; i++)
+   {
+     var retRow = {}
+     var ind = 0;
+     for (var rowKey in rows[i])
+     {
+       var newKey = ind + "";
+       if (cols[ind] === "Latitude" || cols[ind] === "Longitude")
+        newKey = cols[ind];
+       retRow[newKey] = rows[i][rowKey]
+       ind++;
+     }
+
+     retRows.push(retRow);
+   }
+   return retRows;
+ }
+
  resetFields()
  {
    this.setState({
@@ -327,11 +351,32 @@ class Input extends React.Component {
    window.scrollTo(0, 0);
  }
 
+ checkFields()
+ {
+   if (this.state.name === "")
+    return false;
+  if (this.state.description === "")
+    return false;
+  if (this.state.source === "")
+    return false;
+  if (this.state.columns.length === 0)
+    return false;
+  if (this.state.rows.length === 0)
+    return false;
+  return true;
+ }
+
  saveInfo()
  {
+   if (!this.checkFields())
+   {
+     alert("Not enough information given!");
+     //return;
+   }
    this.setState({isSaving: true, saveButtonText: "Saving Data"});
    var type = this.state.category;
    var affliction = this.state.affliction;
+
    var d=new Date();
    var newDate =d.getTime();
    var newInfo = {
@@ -339,56 +384,90 @@ class Input extends React.Component {
      name: this.state.name,
      description: this.state.description,
      date: newDate,
-     source: this.state.source
+     source: this.state.source,
+     uploader: this.props.firstName + " " + this.props.lastName,
    }
 
-   if (this.state.category !== this.state.prevType)
-   {
-     // restructure data
+   console.log(newInfo.uploader)
+
+   if (!this.state.fromDataPage)
+    newInfo['views'] = 0;
+
+   var newCols = this.getColsForSending(this.state.columns);
+   var newRows = this.getRowsForSending(this.state.rows, newCols);
+   var newData = {
+     rows: newRows,
+     cols: newCols,
    }
 
+   var newFinal = {
+     info: newInfo,
+     Data: newData,
+   }
+
+  // editing dataset
    if (this.state.fromDataPage)
    {
-     api.setInfo(type,affliction,newInfo)
-     .then (
-       function (data) {
-       this.setState({
-         isSaving: false,
-         saveButtonText: "Save Data",
-       })
-     }.bind(this))
-   }
-   else {
-     /*
-      api.addDataSet(type, affliction, newInfo)
+     if (type !== this.state.prevType)
+     {
+       // restructure data by changing type
+       api.changeCategory(this.state.prevType,affliction,type)
        .then (
          function (data) {
-           this.props.history.push({
-             pathname: '/data',
-           });
+
+           api.editAffliction(type, affliction,newFinal)
+           .then (
+             function (data2) {
+             this.setState({
+               isSaving: false,
+               saveButtonText: "Save Data",
+             })
+           }.bind(this))
        }.bind(this))
-      */
-      this.props.history.push({
-        pathname: '/data',
-      });
+       return;
+     }
+     else {
+       api.editAffliction(type, affliction,newFinal)
+       .then (
+         function (data) {
+         this.setState({
+           isSaving: false,
+           saveButtonText: "Save Data",
+         })
+       }.bind(this))
+       return;
+     }
+
    }
-   var newCols = this.getColsForSending(this.state.columns);
-   var newRows = JSON.stringify(this.state.rows);
-  // console.log(newCols, newRows);
+   else { // brand new dataset
+     // add first
+     affliction = encodeURIComponent(this.state.name);
+      api.addAffliction(type, this.state.name, this.state.description)
+       .then (
+         function (data) {
+           api.editAffliction( type, affliction, newFinal) //then edit
+            .then (
+              function (data2) {
+                this.props.history.push({
+                  pathname: '/data',
+                });
+            }.bind(this))
+       }.bind(this))
+      return;
+   }
   }
 
   deleteData()
-  {/*
-    api.deleteData(type,affliction)
-    .then (
-      function (data) {
-        this.props.history.push({
-          pathname: '/data',
-        });
-    }.bind(this))*/
-    this.props.history.push({
-      pathname: '/data',
-    });
+  {
+    var type = this.state.category;
+    var affliction = this.state.affliction;
+    api.deleteAffliction(type, affliction) //then edit
+     .then (
+       function (data) {
+         this.props.history.push({
+           pathname: '/data',
+         });
+     }.bind(this))
   }
 
  readFileAndSetData(filename)
@@ -432,7 +511,6 @@ class Input extends React.Component {
           }
           stateRows.push(row)
         }
-        console.log("WUT")
         this.setState({
           name: file.name,
           affliction: file.name,
@@ -505,7 +583,7 @@ class Input extends React.Component {
     // category options to choose
     let categoryOptions = this.state.categories.map( function(categ){
       return (<option key={categ} value={categ}>{categ}</option>)
-    });
+    }.bind(this));
 
     return (
       <div className = 'input-container'>
@@ -532,7 +610,11 @@ class Input extends React.Component {
                   </FormGroup>
                   <FormGroup controlId="formControlsSelect">
                    <ControlLabel>Edit Category:</ControlLabel>
-                   <FormControl componentClass="select" placeholder={this.state.category} onChange={(e) => {this.setState({category: e.target.value});}}>
+                   <FormControl
+                     defaultValue={this.state.category}
+                     componentClass="select"
+                     placeholder={this.state.category}
+                     onChange={(e) => {this.setState({category: e.target.value});}}>
                      {categoryOptions}
                    </FormControl>
                  </FormGroup>

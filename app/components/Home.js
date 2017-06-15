@@ -313,7 +313,7 @@ class SimpleMap extends React.Component {
                       <FormControl
                         type="text"
                         label="Text"
-                        placeholder="Search"
+                        placeholder="Search for Affliction"
                         onChange={this.handleSearch}/>
                       </InputGroup>
                   </Navbar.Brand>
